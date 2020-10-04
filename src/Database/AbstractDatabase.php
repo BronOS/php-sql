@@ -77,11 +77,11 @@ abstract class AbstractDatabase
     {
         if (is_null(self::$schema)) {
             self::$schema = new SQLDatabaseSchema(
-                self::$databaseName,
+                static::$databaseName,
                 $this->getTables(),
-                self::$engine,
-                self::$charset,
-                self::$collation
+                static::$engine,
+                static::$charset,
+                static::$collation
             );
         }
 
