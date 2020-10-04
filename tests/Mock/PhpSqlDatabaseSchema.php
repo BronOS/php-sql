@@ -7,7 +7,7 @@ use BronOS\PhpSql\Database\AbstractDatabase;
 
 class PhpSqlDatabaseSchema extends AbstractDatabase
 {
-    protected static string $databaseName = 'php-sql';
+    protected string $databaseName = 'php-sql';
 
     protected BlogModel $blogModel;
 

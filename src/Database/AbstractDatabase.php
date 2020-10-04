@@ -54,12 +54,12 @@ use BronOS\PhpSqlSchema\SQLTableSchemaInterface;
  */
 abstract class AbstractDatabase
 {
-    private static ?SQLDatabaseSchema $schema = null;
+    private static array $schemas = [];
 
-    protected static string $databaseName;
-    protected static ?string $engine = null;
-    protected static ?string $charset = null;
-    protected static ?string $collation = null;
+    protected string $databaseName;
+    protected ?string $engine = null;
+    protected ?string $charset = null;
+    protected ?string $collation = null;
 
     /**
      * Returns database schema declaration.
@@ -75,33 +75,40 @@ abstract class AbstractDatabase
      */
     public function getSchema(): SQLDatabaseSchema
     {
-        if (is_null(self::$schema)) {
-            self::$schema = new SQLDatabaseSchema(
-                static::$databaseName,
+        if (!isset(self::$schemas[static::class])) {
+            self::$schemas[static::class] = new SQLDatabaseSchema(
+                $this->databaseName,
                 $this->getTables(),
-                static::$engine,
-                static::$charset,
-                static::$collation
+                $this->engine,
+                $this->charset,
+                $this->collation
             );
         }
 
-        return self::$schema;
+        return self::$schemas[static::class];
     }
 
     /**
      * Returns list of models.
      *
      * @return AbstractModel[]
+     *
+     * @throws DuplicateColumnException
+     * @throws DuplicateIndexException
+     * @throws DuplicateRelationException
+     * @throws DuplicateTableException
+     * @throws PhpSqlException
+     * @throws SQLTableSchemaDeclarationException
      */
     protected function getModels(): array
     {
-        if (is_null(self::$schema)) {
+        if (!isset(self::$schemas[static::class])) {
             return array_filter(get_object_vars($this), function ($prop) {
                 return $prop instanceof AbstractModel;
             });
         }
 
-        return self::$schema->getTables();
+        return $this->getSchema()->getTables();
     }
 
     /**
@@ -109,11 +116,12 @@ abstract class AbstractDatabase
      *
      * @return SQLTableSchemaInterface[]
      *
-     * @throws SQLTableSchemaDeclarationException
      * @throws DuplicateColumnException
      * @throws DuplicateIndexException
      * @throws DuplicateRelationException
+     * @throws DuplicateTableException
      * @throws PhpSqlException
+     * @throws SQLTableSchemaDeclarationException
      */
     protected function getTables(): array
     {

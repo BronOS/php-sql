@@ -57,18 +57,18 @@ use ReflectionException;
  */
 abstract class AbstractModel
 {
-    private static ?SQLTableSchema $schema = null;
+    private static array $schemas = [];
 
-    protected static ?string $tableName = null;
-    protected static ?string $engine = null;
-    protected static ?string $charset = null;
-    protected static ?string $collation = null;
+    protected ?string $tableName = null;
+    protected ?string $engine = null;
+    protected ?string $charset = null;
+    protected ?string $collation = null;
 
     public bool $isDirty = false;
 
-    private static ?array $fields = null;
-    private static ?array $columns = null;
-    private static ?array $columnNames = null;
+    private static array $fields = [];
+    private static array $columns = [];
+    private static array $columnNames = [];
 
     /**
      * Returns database table schema declaration.
@@ -83,19 +83,19 @@ abstract class AbstractModel
      */
     public function getSchema(): SQLTableSchema
     {
-        if (is_null(self::$schema)) {
-            self::$schema = new SQLTableSchema(
+        if (!isset(self::$schemas[static::class])) {
+            self::$schemas[static::class] = new SQLTableSchema(
                 $this->getTableName(),
                 $this->getColumns(),
                 self::getIndexes(),
                 self::getRelations(),
-                self::$engine,
-                self::$charset,
-                self::$collation
+                $this->engine,
+                $this->charset,
+                $this->collation
             );
         }
 
-        return self::$schema;
+        return self::$schemas[static::class];
     }
 
     /**
@@ -105,17 +105,17 @@ abstract class AbstractModel
      */
     private function getTableName(): string
     {
-        if (is_null(self::$tableName)) {
+        if (is_null($this->tableName)) {
             try {
                 $className = (new ReflectionClass($this))->getShortName();
             } catch (ReflectionException $e) {
                 throw new PhpSqlException('Cannot extract table name', $e->getCode(), $e);
             }
 
-            self::$tableName = $this->toUnderscore(str_ireplace('model', '', $className));
+            $this->tableName = $this->toUnderscore(str_ireplace('model', '', $className));
         }
 
-        return self::$tableName;
+        return $this->tableName;
     }
 
     /**
@@ -143,13 +143,13 @@ abstract class AbstractModel
      */
     public function getColumns(): array
     {
-        if (is_null(self::$columns)) {
-            self::$columns = array_map(function (AbstractField $field) {
+        if (!isset(self::$columns[static::class])) {
+            self::$columns[static::class] = array_map(function (AbstractField $field) {
                 return $field->getColumn();
             }, $this->getFields());
         }
 
-        return self::$columns;
+        return self::$columns[static::class];
     }
 
     /**
@@ -159,13 +159,13 @@ abstract class AbstractModel
      */
     public function getColumnNames(): array
     {
-        if (is_null(self::$columnNames)) {
-            self::$columnNames = array_map(function (ColumnInterface $column) {
+        if (!isset(self::$columnNames[static::class])) {
+            self::$columnNames[static::class] = array_map(function (ColumnInterface $column) {
                 return $column->getName();
             }, $this->getColumns());
         }
 
-        return self::$columnNames;
+        return self::$columnNames[static::class];
     }
 
     /**
@@ -175,13 +175,13 @@ abstract class AbstractModel
      */
     public function getFields(): array
     {
-        if (is_null(self::$fields)) {
-            self::$fields = array_filter(get_object_vars($this), function ($prop) {
+        if (!isset(self::$fields[static::class])) {
+            self::$fields[static::class] = array_filter(get_object_vars($this), function ($prop) {
                 return $prop instanceof AbstractField;
             });
         }
 
-        return self::$fields;
+        return self::$fields[static::class];
     }
 
     /**
