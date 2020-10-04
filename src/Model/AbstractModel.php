@@ -87,8 +87,8 @@ abstract class AbstractModel
             self::$schemas[static::class] = new SQLTableSchema(
                 $this->getTableName(),
                 $this->getColumns(),
-                self::getIndexes(),
-                self::getRelations(),
+                static::getIndexes(),
+                static::getRelations(),
                 $this->engine,
                 $this->charset,
                 $this->collation
