@@ -1,2 +1,2 @@
 # php-sql
-Php SQL
+PHP SQL

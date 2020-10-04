@@ -1,0 +1,36 @@
+{
+  "name": "bronos/php-sql",
+  "description": "PHP SQL",
+  "keywords": ["sql", "db", "database", "orm", "repository", "model"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oleg Bronzov",
+      "email": "oleg.bronzov@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-pdo": "*",
+    "bronos/php-enum": "*",
+    "bronos/php-sql-schema": "1.*",
+    "bronos/php-sql-migrations": "1.*",
+    "aura/sqlquery": "2.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "BronOS\\PhpSql\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "BronOS\\PhpSql\\Tests\\": "tests/"
+    },
+    "scripts": {
+      "test": "vendor/bin/phpunit --coverage-clover=coverage.xml"
+    }
+  }
+}
