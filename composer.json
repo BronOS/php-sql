@@ -34,8 +34,5 @@
     "scripts": {
       "test": "vendor/bin/phpunit --coverage-clover=coverage.xml"
     }
-  },
-  "bin": [
-    "../beachbum2/sql/bin/mg"
-  ]
+  }
 }
