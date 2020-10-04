@@ -3,11 +3,7 @@
 namespace BronOS\PhpSql\Tests\Model;
 
 
-use BronOS\PhpSql\Field\VarCharField;
-use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\Tests\Mock\BlogModel;
-use BronOS\PhpSqlSchema\Column\ColumnInterface;
-use BronOS\PhpSqlSchema\Column\Numeric\BigIntColumn;
 use BronOS\PhpSqlSchema\Column\Numeric\IntColumn;
 use BronOS\PhpSqlSchema\Column\String\VarCharColumn;
 use BronOS\PhpSqlSchema\SQLTableSchema;

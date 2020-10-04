@@ -3,7 +3,6 @@
 namespace BronOS\PhpSql\Tests\Mock;
 
 
-use BronOS\PhpSql\Field\BigIntField;
 use BronOS\PhpSql\Field\IntField;
 use BronOS\PhpSql\Field\VarCharField;
 use BronOS\PhpSql\Model\AbstractModel;

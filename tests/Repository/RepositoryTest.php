@@ -5,13 +5,10 @@ namespace BronOS\PhpSql\Tests\Repository;
 
 
 use Aura\SqlQuery\QueryFactory;
-use BronOS\PhpSql\Exception\PhpSqlException;
 use BronOS\PhpSql\Repository\Cache\ApcuCacheStorage;
 use BronOS\PhpSql\Tests\BaseTestCase;
 use BronOS\PhpSql\Tests\Mock\BlogModel;
 use BronOS\PhpSql\Tests\Mock\BlogRepository;
-use PDO;
-use PDOException;
 
 class RepositoryTest extends BaseTestCase
 {
