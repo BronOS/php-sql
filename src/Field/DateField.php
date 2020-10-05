@@ -60,6 +60,7 @@ class DateField extends AbstractField
      * @param AbstractModel $model
      * @param array         $row
      * @param string        $name
+     * @param int           $size
      * @param bool          $isDefaultTimestamp
      * @param bool          $isNullable
      * @param string|null   $default
@@ -72,6 +73,7 @@ class DateField extends AbstractField
         AbstractModel $model,
         array $row,
         string $name,
+        int $size = 0,
         bool $isDefaultTimestamp = false,
         bool $isNullable = false,
         ?string $default = null,
@@ -82,6 +84,7 @@ class DateField extends AbstractField
         if (!$this->isColumnExists()) {
             $this->setColumn(new DateColumn(
                 $name,
+                $size,
                 $isDefaultTimestamp,
                 $isNullable,
                 $default,

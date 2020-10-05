@@ -64,6 +64,7 @@ class TimestampField extends AbstractField
      * @param AbstractModel $model
      * @param array         $row
      * @param string        $name
+     * @param int           $size
      * @param bool          $isNullable
      * @param bool          $isDefaultTimestamp
      * @param bool          $isOnUpdateTimestamp
@@ -77,6 +78,7 @@ class TimestampField extends AbstractField
         AbstractModel $model,
         array $row,
         string $name,
+        int $size = 0,
         bool $isNullable = false,
         bool $isDefaultTimestamp = false,
         bool $isOnUpdateTimestamp = false,
@@ -88,6 +90,7 @@ class TimestampField extends AbstractField
         if (!$this->isColumnExists()) {
             $this->setColumn(new TimestampColumn(
                 $name,
+                $size,
                 $isNullable,
                 $isDefaultTimestamp,
                 $isOnUpdateTimestamp,

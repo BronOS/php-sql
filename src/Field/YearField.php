@@ -61,6 +61,7 @@ class YearField extends AbstractField
      * @param AbstractModel $model
      * @param array         $row
      * @param string        $name
+     * @param int           $size
      * @param bool          $isDefaultTimestamp
      * @param bool          $isNullable
      * @param string|null   $default
@@ -73,6 +74,7 @@ class YearField extends AbstractField
         AbstractModel $model,
         array $row,
         string $name,
+        int $size = 0,
         bool $isDefaultTimestamp = false,
         bool $isNullable = false,
         ?string $default = null,
@@ -83,6 +85,7 @@ class YearField extends AbstractField
         if (!$this->isColumnExists()) {
             $this->setColumn(new YearColumn(
                 $name,
+                $size,
                 $isDefaultTimestamp,
                 $isNullable,
                 $default,
