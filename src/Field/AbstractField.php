@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
+use Aura\SqlQuery\AbstractQuery;
 use BronOS\PhpSql\Field\Helper\DirtyTrait;
 use BronOS\PhpSql\Field\Helper\ModelTrait;
 use BronOS\PhpSql\Model\AbstractModel;
@@ -48,7 +49,7 @@ use BronOS\PhpSqlSchema\Column\ColumnInterface;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class AbstractField
+abstract class AbstractField
 {
     use ModelTrait;
     use DirtyTrait;
@@ -105,4 +106,13 @@ class AbstractField
     {
         return get_class($this->getModel()) . '::' . $this->columnName;
     }
+
+    /**
+     * Returns field value.
+     *
+     * @return mixed
+     */
+    abstract public function getValue();
+
+    abstract public function bindWhere(AbstractQuery $query): void;
 }

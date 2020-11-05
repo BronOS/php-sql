@@ -34,6 +34,9 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field\Helper;
 
 
+use Aura\SqlQuery\AbstractQuery;
+use Aura\SqlQuery\Common\ValuesInterface;
+
 /**
  * Array value trait.
  *
@@ -46,11 +49,30 @@ trait ArrayValueTrait
 {
     use ModelTrait;
     use DirtyTrait;
+    use BindTrait;
 
     /**
      * @var string[]|null
      */
     private ?array $value = null;
+
+    /**
+     * Binds field with where statement.
+     * Uses internal value when passed value is null.
+     *
+     * @param AbstractQuery $query
+     * @param array|null    $value
+     * @param string        $operator
+     */
+    public function bindWhere(AbstractQuery $query, ?array $value = null, string $operator = '='): void
+    {
+        $this->where(
+            $query,
+            $this->getColumn()->getName(),
+            implode(',', $value ?? $this->getValue()),
+            $operator
+        );
+    }
 
     /**
      * @return string[]|null
@@ -68,6 +90,18 @@ trait ArrayValueTrait
         $this->isDirty = true;
         $this->getModel()->isDirty = true;
         $this->value = $value;
+    }
+
+    /**
+     * Binds field with query column.
+     * Uses internal value when passed value is null.
+     *
+     * @param ValuesInterface $query
+     * @param array|null      $value
+     */
+    public function bindCol(ValuesInterface $query, ?array $value = null): void
+    {
+        $this->col($query, $this->getColumn()->getName(), implode(',', $value ?? $this->getValue()));
     }
 
     /**

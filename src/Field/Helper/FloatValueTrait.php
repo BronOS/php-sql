@@ -34,6 +34,9 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field\Helper;
 
 
+use Aura\SqlQuery\AbstractQuery;
+use Aura\SqlQuery\Common\ValuesInterface;
+
 /**
  * Float value trait.
  *
@@ -46,8 +49,22 @@ trait FloatValueTrait
 {
     use ModelTrait;
     use DirtyTrait;
+    use BindTrait;
 
     private ?float $value = null;
+
+    /**
+     * Binds field with where statement.
+     * Uses internal value when passed value is null.
+     *
+     * @param AbstractQuery $query
+     * @param float|null    $value
+     * @param string        $operator
+     */
+    public function bindWhere(AbstractQuery $query, ?float $value = null, string $operator = '='): void
+    {
+        $this->where($query, $this->getColumn()->getName(), (string)($value ?? $this->getValue()), $operator);
+    }
 
     /**
      * @return float|null
@@ -65,6 +82,18 @@ trait FloatValueTrait
         $this->isDirty = true;
         $this->getModel()->isDirty = true;
         $this->value = $value;
+    }
+
+    /**
+     * Binds field with query column.
+     * Uses internal value when passed value is null.
+     *
+     * @param ValuesInterface $query
+     * @param float|null      $value
+     */
+    public function bindCol(ValuesInterface $query, ?float $value = null): void
+    {
+        $this->col($query, $this->getColumn()->getName(), (string)($value ?? $this->getValue()));
     }
 
     /**

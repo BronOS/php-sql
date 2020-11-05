@@ -34,6 +34,8 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field\Helper;
 
 
+use Aura\SqlQuery\AbstractQuery;
+use Aura\SqlQuery\Common\ValuesInterface;
 use BronOS\PhpSql\Exception\PhpSqlException;
 use DateTime;
 use Exception;
@@ -50,8 +52,32 @@ trait DateTimeValueTrait
 {
     use ModelTrait;
     use DirtyTrait;
+    use BindTrait;
 
     private ?DateTime $value = null;
+
+    /**
+     * Binds field with where statement.
+     * Uses internal value when passed value is null.
+     *
+     * @param AbstractQuery $query
+     * @param DateTime|null $value
+     * @param string        $operator
+     * @param string        $dateFormat
+     */
+    public function bindWhere(
+        AbstractQuery $query,
+        ?DateTime $value = null,
+        string $operator = '=',
+        string $dateFormat = 'Y-m-d H:i:s'
+    ): void {
+        $this->where(
+            $query,
+            $this->getColumn()->getName(),
+            ($value ?? $this->getValue())->format($dateFormat),
+            $operator
+        );
+    }
 
     /**
      * @return DateTime|null
@@ -69,6 +95,19 @@ trait DateTimeValueTrait
         $this->isDirty = true;
         $this->getModel()->isDirty = true;
         $this->value = $value;
+    }
+
+    /**
+     * Binds field with query column.
+     * Uses internal value when passed value is null.
+     *
+     * @param ValuesInterface $query
+     * @param DateTime|null   $value
+     * @param string          $dateFormat
+     */
+    public function bindCol(ValuesInterface $query, ?DateTime $value = null, string $dateFormat = 'Y-m-d H:i:s'): void
+    {
+        $this->col($query, $this->getColumn()->getName(), ($value ?? $this->getValue())->format($dateFormat));
     }
 
     /**

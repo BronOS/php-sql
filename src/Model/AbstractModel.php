@@ -66,7 +66,6 @@ abstract class AbstractModel
 
     public bool $isDirty = false;
 
-    private static array $fields = [];
     private static array $columns = [];
     private static array $columnNames = [];
 
@@ -175,13 +174,9 @@ abstract class AbstractModel
      */
     public function getFields(): array
     {
-        if (!isset(self::$fields[static::class])) {
-            self::$fields[static::class] = array_filter(get_object_vars($this), function ($prop) {
-                return $prop instanceof AbstractField;
-            });
-        }
-
-        return self::$fields[static::class];
+        return array_filter(get_object_vars($this), function ($prop) {
+            return $prop instanceof AbstractField;
+        });
     }
 
     /**
@@ -238,5 +233,17 @@ abstract class AbstractModel
     public function newFromRows(array $rows): array
     {
         return array_map([$this, 'newFromRow'], $rows);
+    }
+
+    /**
+     * Marks itself and all internal fields as undirty.
+     */
+    public function undirty(): void
+    {
+        $this->isDirty = false;
+
+        foreach ($this->getFields() as $field) {
+            $field->isDirty = false;
+        }
     }
 }

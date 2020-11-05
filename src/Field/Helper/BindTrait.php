@@ -38,74 +38,34 @@ use Aura\SqlQuery\AbstractQuery;
 use Aura\SqlQuery\Common\ValuesInterface;
 
 /**
- * Bool value trait.
+ * Bind where trait.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait BoolValueTrait
+trait BindTrait
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use BindTrait;
-
-    private ?bool $value = null;
-
     /**
-     * Binds field with where statement.
-     * Uses internal value when passed value is null.
-     *
      * @param AbstractQuery $query
-     * @param bool|null     $value
+     * @param string        $columnName
+     * @param string        $value
      * @param string        $operator
      */
-    public function bindWhere(AbstractQuery $query, ?bool $value = null, string $operator = '='): void
+    protected function where(AbstractQuery $query, string $columnName, string $value, string $operator = '='): void
     {
-        $value = $value ?? $this->getValue();
-        $this->where($query, $this->getColumn()->getName(), $value ? '1' : '0', $operator);
+        $query->where(sprintf('%s %s :%s', $columnName, $operator, $columnName));
+        $query->bindValue($columnName, $value);
     }
 
     /**
-     * @return bool|null
-     */
-    public function getValue(): ?bool
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param bool|null $value
-     */
-    public function setValue(?bool $value): void
-    {
-        $this->isDirty = true;
-        $this->getModel()->isDirty = true;
-        $this->value = $value;
-    }
-
-    /**
-     * Binds field with query column.
-     * Uses internal value when passed value is null.
-     *
      * @param ValuesInterface $query
-     * @param int|null        $value
+     * @param string          $columnName
+     * @param string          $value
      */
-    public function bindCol(ValuesInterface $query, ?int $value = null): void
+    protected function col(ValuesInterface $query, string $columnName, string $value): void
     {
-        $value = $value ?? $this->getValue();
-        $this->col($query, $this->getColumn()->getName(), $value ? '1' : '0');
-    }
-
-    /**
-     * @param array  $row
-     * @param string $fieldName
-     */
-    protected function setValueFromRow(array $row, string $fieldName): void
-    {
-        if (isset($row[$fieldName]) && !is_null($row[$fieldName])) {
-            $this->value = (bool)$row[$fieldName];
-        }
+        $query->cols([$columnName => $value]);
     }
 }

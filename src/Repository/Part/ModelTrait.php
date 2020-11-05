@@ -69,6 +69,7 @@ trait ModelTrait
     {
         return $this->getSchema()->getName();
     }
+
     /**
      * Returns all column names.
      *

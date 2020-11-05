@@ -34,12 +34,14 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Repository\Part;
 
 
+use Aura\SqlQuery\AbstractQuery;
 use Aura\SqlQuery\Common\DeleteInterface;
 use Aura\SqlQuery\Common\InsertInterface;
 use Aura\SqlQuery\Common\SelectInterface;
 use Aura\SqlQuery\Common\UpdateInterface;
 use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Exception\PhpSqlException;
+use BronOS\PhpSql\Model\AbstractModel;
 
 /**
  * Query builder interface.
@@ -59,36 +61,46 @@ interface QueryBuilderInterface
     /**
      * Returns new select query object filled with table name.
      *
-     * @return SelectInterface
+     * @param string|null $where
+     * @param array       $binds
+     *
+     * @return SelectInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newSelect(): SelectInterface;
+    public function newSelect(?string $where = null, array $binds = []): AbstractQuery;
 
     /**
      * Returns new insert query object with table name.
      *
-     * @return InsertInterface
+     * @param AbstractModel|null $model
+     *
+     * @return InsertInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newInsert(): InsertInterface;
+    public function newInsert(?AbstractModel $model = null): AbstractQuery;
 
     /**
      * Returns new update query object with table name.
      *
-     * @return UpdateInterface
+     * @param AbstractModel|null $model
+     *
+     * @return UpdateInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newUpdate(): UpdateInterface;
+    public function newUpdate(?AbstractModel $model = null): AbstractQuery;
 
     /**
      * Returns new delete query object with table name.
      *
-     * @return DeleteInterface
+     * @param string|null $where
+     * @param array       $binds
+     *
+     * @return DeleteInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newDelete(): DeleteInterface;
+    public function newDelete(?string $where = null, array $binds = []): AbstractQuery;
 }

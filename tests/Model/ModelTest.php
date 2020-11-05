@@ -7,7 +7,6 @@ use BronOS\PhpSql\Tests\Mock\BlogModel;
 use BronOS\PhpSqlSchema\Column\Numeric\IntColumn;
 use BronOS\PhpSqlSchema\Column\String\VarCharColumn;
 use BronOS\PhpSqlSchema\SQLTableSchema;
-use NilPortugues\Sql\QueryBuilder\Builder\GenericBuilder;
 use PHPUnit\Framework\TestCase;
 
 
@@ -51,5 +50,19 @@ class ModelTest extends TestCase
             ['id' => 400],
         ]);
         $this->assertCount(2, $newList);
+    }
+
+    public function testDirty()
+    {
+        $model = new BlogModel();
+        $model->getTitle()->setValue('test');
+
+        $this->assertTrue($model->getTitle()->isDirty);
+
+        $dirtyFields = $model->getDirtyFields();
+
+        $this->assertCount(1, $dirtyFields);
+        $this->assertArrayHasKey('title', $dirtyFields);
+        $this->assertEquals('test', $dirtyFields['title']->getValue());
     }
 }

@@ -34,14 +34,16 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Repository\Part;
 
 
+use Aura\SqlQuery\AbstractQuery;
 use Aura\SqlQuery\Common\DeleteInterface;
 use Aura\SqlQuery\Common\InsertInterface;
 use Aura\SqlQuery\Common\SelectInterface;
 use Aura\SqlQuery\Common\UpdateInterface;
 use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Exception\PhpSqlException;
-use NilPortugues\Sql\QueryBuilder\Builder\GenericBuilder;
-use NilPortugues\Sql\QueryBuilder\Manipulation\Select;
+use BronOS\PhpSql\Field\AbstractField;
+use BronOS\PhpSql\Field\Helper\StringValueTrait;
+use BronOS\PhpSql\Model\AbstractModel;
 
 /**
  * Query builder trait
@@ -68,51 +70,94 @@ trait QueryBuilderTrait
     /**
      * Returns new select query object filled with table name.
      *
-     * @return SelectInterface
+     * @param string|null $where
+     * @param array       $binds
+     *
+     * @return AbstractQuery|SelectInterface
      *
      * @throws PhpSqlException
      */
-    public function newSelect(): SelectInterface
+    public function newSelect(?string $where = null, array $binds = []): AbstractQuery
     {
-        return $this->getQueryFactory()
+        $select = $this->getQueryFactory()
             ->newSelect()
             ->cols($this->getColumnNames())
             ->from($this->getTableName());
+
+        if (!is_null($where)) {
+            $select->where($where)->bindValues($binds);
+        }
+
+        return $select;
     }
 
     /**
      * Returns new insert query object with table name.
      *
-     * @return InsertInterface
+     * @param AbstractModel|null $model
+     *
+     * @return AbstractQuery|InsertInterface
      *
      * @throws PhpSqlException
      */
-    public function newInsert(): InsertInterface
+    public function newInsert(?AbstractModel $model = null): AbstractQuery
     {
-        return $this->getQueryFactory()->newInsert()->into($this->getTableName());
+        $insert = $this->getQueryFactory()->newInsert();
+
+        if (!is_null($model)) {
+            foreach ($model->getDirtyFields() as $field) {
+                $field->bindCol($insert);
+            }
+        }
+
+        return $insert->into($this->getTableName());
     }
 
     /**
      * Returns new update query object with table name.
      *
-     * @return UpdateInterface
+     * @param AbstractModel|null $model
+     * @param AbstractField|null $whereBy
+     *
+     * @return AbstractQuery|UpdateInterface
      *
      * @throws PhpSqlException
      */
-    public function newUpdate(): UpdateInterface
+    public function newUpdate(?AbstractModel $model = null, ?AbstractField $whereBy = null): AbstractQuery
     {
-        return $this->getQueryFactory()->newUpdate()->table($this->getTableName());
+        $update = $this->getQueryFactory()->newUpdate();
+
+        if (!is_null($model)) {
+            foreach ($model->getDirtyFields() as $field) {
+                $field->bindCol($update);
+            }
+        }
+
+        if (!is_null($whereBy)) {
+            $whereBy->bindWhere($update);
+        }
+
+        return $update->table($this->getTableName());
     }
 
     /**
      * Returns new delete query object with table name.
      *
-     * @return DeleteInterface
+     * @param string|null $where
+     * @param array       $binds
+     *
+     * @return AbstractQuery|DeleteInterface
      *
      * @throws PhpSqlException
      */
-    public function newDelete(): DeleteInterface
+    public function newDelete(?string $where = null, array $binds = []): AbstractQuery
     {
-        return $this->getQueryFactory()->newDelete()->from($this->getTableName());
+        $delete = $this->getQueryFactory()->newDelete()->from($this->getTableName());
+
+        if (!is_null($where)) {
+            $delete->where($where)->bindValues($binds);
+        }
+
+        return $delete;
     }
 }
