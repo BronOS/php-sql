@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
+use BronOS\PhpSql\Field\Helper\IntValueFieldInterface;
 use BronOS\PhpSql\Field\Helper\IntValueTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Numeric\TinyIntColumn;
@@ -59,7 +60,7 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class TinyIntField extends AbstractField
+class TinyIntField extends AbstractField implements IntValueFieldInterface
 {
     use IntValueTrait;
 

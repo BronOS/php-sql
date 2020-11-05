@@ -99,15 +99,12 @@ trait DateTimeValueTrait
 
     /**
      * Binds field with query column.
-     * Uses internal value when passed value is null.
      *
      * @param ValuesInterface $query
-     * @param DateTime|null   $value
-     * @param string          $dateFormat
      */
-    public function bindCol(ValuesInterface $query, ?DateTime $value = null, string $dateFormat = 'Y-m-d H:i:s'): void
+    public function bindCol(ValuesInterface $query): void
     {
-        $this->col($query, $this->getColumn()->getName(), ($value ?? $this->getValue())->format($dateFormat));
+        $this->col($query, $this->getColumn()->getName(), $this->getValue()->format('Y-m-d H:i:s'));
     }
 
     /**

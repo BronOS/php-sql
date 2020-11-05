@@ -38,70 +38,32 @@ use Aura\SqlQuery\AbstractQuery;
 use Aura\SqlQuery\Common\ValuesInterface;
 
 /**
- * Int value trait.
+ * String value field interface.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait IntValueTrait
+interface StringValueFieldInterface
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use BindTrait;
-
-    private ?int $value = null;
-
     /**
      * Binds field with where statement.
      * Uses internal value when passed value is null.
      *
      * @param AbstractQuery $query
-     * @param int|null      $value
+     * @param string|null   $value
      * @param string        $operator
      */
-    public function bindWhere(AbstractQuery $query, ?int $value = null, string $operator = '='): void
-    {
-        $this->where($query, $this->getColumn()->getName(), (string)($value ?? $this->getValue()), $operator);
-    }
+    public function bindWhere(AbstractQuery $query, ?string $value = null, string $operator = '='): void;
 
     /**
-     * @return int|null
+     * @return string|null
      */
-    public function getValue(): ?int
-    {
-        return $this->value;
-    }
+    public function getValue(): ?string;
 
     /**
-     * @param int|null $value
+     * @param string|null $value
      */
-    public function setValue(?int $value): void
-    {
-        $this->isDirty = true;
-        $this->getModel()->isDirty = true;
-        $this->value = $value;
-    }
-
-    /**
-     * Binds field with query column.
-     *
-     * @param ValuesInterface $query
-     */
-    public function bindCol(ValuesInterface $query): void
-    {
-        $this->col($query, $this->getColumn()->getName(), (string)$this->getValue());
-    }
-
-    /**
-     * @param array  $row
-     * @param string $fieldName
-     */
-    protected function setValueFromRow(array $row, string $fieldName): void
-    {
-        if (isset($row[$fieldName]) && !is_null($row[$fieldName])) {
-            $this->value = (int)$row[$fieldName];
-        }
-    }
+    public function setValue(?string $value): void;
 }

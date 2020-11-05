@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
+use BronOS\PhpSql\Field\Helper\IntValueFieldInterface;
 use BronOS\PhpSql\Field\Helper\IntValueTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Numeric\MediumIntColumn;
@@ -59,7 +60,7 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class MediumIntField extends AbstractField
+class MediumIntField extends AbstractField implements IntValueFieldInterface
 {
     use IntValueTrait;
 

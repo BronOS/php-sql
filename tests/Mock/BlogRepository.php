@@ -34,9 +34,15 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function findById(int $id, bool $force = false): BlogModel
     {
-        $select = $this->newSelect();
-        $this->getModel()->getId()->bindWhere($select, $id);
-        return $this->getModel()->newFromRow($this->fetchOneCache($select, $force));
+        return $this->getModel()->newFromRow(
+            $this->fetchOneCache(
+                $this->newSelectWhereInt(
+                    $this->getModel()->getId(),
+                    $id
+                ),
+                $force
+            )
+        );
     }
 
     /**
@@ -49,7 +55,7 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function create(BlogModel $model): int
     {
-        $id = (int)$this->executeInsert($this->newInsert($model));
+        $id = (int)$this->executeInsert($this->newInsertByModel($model));
 
         $model->getId()->setValue($id);
         $model->undirty();
@@ -67,7 +73,7 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function update(BlogModel $model): bool
     {
-        $this->executeUpdate($this->newUpdate($model, $model->getId()));
+        $this->executeUpdate($this->newUpdateWhereInt($model, $model->getId()));
         $model->undirty();
         return true;
     }
@@ -82,9 +88,12 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function delete(int $id): bool
     {
-        $delete = $this->newDelete();
-        $this->getModel()->getId()->bindWhere($delete, $id);
-        $this->executeDelete($delete);
+        $this->executeDelete(
+            $this->newDeleteWhereInt(
+                $this->getModel()->getId(),
+                $id
+            )
+        );
         return true;
     }
 }

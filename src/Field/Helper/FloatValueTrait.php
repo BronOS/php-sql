@@ -86,14 +86,12 @@ trait FloatValueTrait
 
     /**
      * Binds field with query column.
-     * Uses internal value when passed value is null.
      *
      * @param ValuesInterface $query
-     * @param float|null      $value
      */
-    public function bindCol(ValuesInterface $query, ?float $value = null): void
+    public function bindCol(ValuesInterface $query): void
     {
-        $this->col($query, $this->getColumn()->getName(), (string)($value ?? $this->getValue()));
+        $this->col($query, $this->getColumn()->getName(), (string)$this->getValue());
     }
 
     /**

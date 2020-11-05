@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
+use BronOS\PhpSql\Field\Helper\IntValueFieldInterface;
 use BronOS\PhpSql\Field\Helper\IntValueTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Numeric\BigIntColumn;
@@ -61,7 +62,7 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class BigIntField extends AbstractField
+class BigIntField extends AbstractField implements IntValueFieldInterface
 {
     use IntValueTrait;
 

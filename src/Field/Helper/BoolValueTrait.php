@@ -87,15 +87,12 @@ trait BoolValueTrait
 
     /**
      * Binds field with query column.
-     * Uses internal value when passed value is null.
      *
      * @param ValuesInterface $query
-     * @param int|null        $value
      */
-    public function bindCol(ValuesInterface $query, ?int $value = null): void
+    public function bindCol(ValuesInterface $query): void
     {
-        $value = $value ?? $this->getValue();
-        $this->col($query, $this->getColumn()->getName(), $value ? '1' : '0');
+        $this->col($query, $this->getColumn()->getName(), $this->getValue() ? '1' : '0');
     }
 
     /**

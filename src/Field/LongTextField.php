@@ -34,6 +34,7 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
+use BronOS\PhpSql\Field\Helper\StringValueFieldInterface;
 use BronOS\PhpSql\Field\Helper\StringValueTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\String\LongTextColumn;
@@ -91,7 +92,7 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class LongTextField extends AbstractField
+class LongTextField extends AbstractField implements StringValueFieldInterface
 {
     use StringValueTrait;
 

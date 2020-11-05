@@ -86,14 +86,12 @@ trait StringValueTrait
 
     /**
      * Binds field with query column.
-     * Uses internal value when passed value is null.
      *
      * @param ValuesInterface $query
-     * @param string|null     $value
      */
-    public function bindCol(ValuesInterface $query, ?string $value = null): void
+    public function bindCol(ValuesInterface $query): void
     {
-        $this->col($query, $this->getColumn()->getName(), $value ?? $this->getValue());
+        $this->col($query, $this->getColumn()->getName(), $this->getValue());
     }
 
     /**

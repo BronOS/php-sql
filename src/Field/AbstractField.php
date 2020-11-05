@@ -35,6 +35,7 @@ namespace BronOS\PhpSql\Field;
 
 
 use Aura\SqlQuery\AbstractQuery;
+use Aura\SqlQuery\Common\ValuesInterface;
 use BronOS\PhpSql\Field\Helper\DirtyTrait;
 use BronOS\PhpSql\Field\Helper\ModelTrait;
 use BronOS\PhpSql\Model\AbstractModel;
@@ -108,11 +109,9 @@ abstract class AbstractField
     }
 
     /**
-     * Returns field value.
+     * Binds field with query column.
      *
-     * @return mixed
+     * @param ValuesInterface $query
      */
-    abstract public function getValue();
-
-    abstract public function bindWhere(AbstractQuery $query): void;
+    abstract public function bindCol(ValuesInterface $query): void;
 }

@@ -94,14 +94,12 @@ trait ArrayValueTrait
 
     /**
      * Binds field with query column.
-     * Uses internal value when passed value is null.
      *
      * @param ValuesInterface $query
-     * @param array|null      $value
      */
-    public function bindCol(ValuesInterface $query, ?array $value = null): void
+    public function bindCol(ValuesInterface $query): void
     {
-        $this->col($query, $this->getColumn()->getName(), implode(',', $value ?? $this->getValue()));
+        $this->col($query, $this->getColumn()->getName(), implode(',', $this->getValue()));
     }
 
     /**
