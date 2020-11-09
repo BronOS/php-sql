@@ -5,6 +5,7 @@ namespace BronOS\PhpSql\Tests\Repository;
 
 
 use Aura\SqlQuery\QueryFactory;
+use BronOS\PhpSql\Exception\InsertException;
 use BronOS\PhpSql\Exception\NotFoundException;
 use BronOS\PhpSql\Repository\Cache\ApcuCacheStorage;
 use BronOS\PhpSql\Tests\BaseTestCase;
@@ -74,6 +75,14 @@ class RepositoryTest extends BaseTestCase
         $rModel = $repo->findById(1, true);
 
         $this->assertEquals('Blog UPDATED', $rModel->getTitle()->getValue());
+    }
+
+    public function testError()
+    {
+        $repo = $this->getRepo();
+
+        $this->expectException(InsertException::class);
+        $repo->executeInsertRaw('INSERT INTO blog (title) VALUES (?, ?)', ['ttt']);
     }
 
     private function getRepo(): BlogRepository

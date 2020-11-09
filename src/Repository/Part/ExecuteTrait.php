@@ -70,7 +70,11 @@ trait ExecuteTrait
 
             $sth->execute($binds);
         } catch (PDOException $e) {
-            throw new PhpSqlException('DB query execution error: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new PhpSqlException(sprintf(
+                'DB query execution error: %s: %s',
+                $e->getCode(),
+                $e->getMessage()
+            ), (int)$e->getCode(), $e);
         }
 
         return $sth;
