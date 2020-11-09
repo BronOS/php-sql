@@ -34,12 +34,9 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Repository;
 
 
-use BronOS\PhpSql\Repository\Part\ExecuteInterface;
 use BronOS\PhpSql\Repository\Part\ModelInterface;
-use BronOS\PhpSql\Repository\Part\PdoInterface;
 use BronOS\PhpSql\Repository\Part\QueryBuilderInterface;
 use BronOS\PhpSql\Repository\Part\ReadInterface;
-use BronOS\PhpSql\Repository\Part\TransactionInterface;
 use BronOS\PhpSql\Repository\Part\WriteInterface;
 
 /**
@@ -51,12 +48,10 @@ use BronOS\PhpSql\Repository\Part\WriteInterface;
  * @license   https://opensource.org/licenses/MIT
  */
 interface RepositoryInterface
-    extends ExecuteInterface,
+    extends RawRepositoryInterface,
             ModelInterface,
-            PdoInterface,
             QueryBuilderInterface,
             ReadInterface,
-            TransactionInterface,
             WriteInterface
 {
 }

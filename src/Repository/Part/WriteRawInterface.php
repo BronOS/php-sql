@@ -34,42 +34,53 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Repository\Part;
 
 
-use Aura\SqlQuery\Common\SelectInterface;
-use BronOS\PhpSql\Exception\NotFoundException;
-use BronOS\PhpSql\Exception\PhpSqlException;
+use BronOS\PhpSql\Exception\DeleteException;
+use BronOS\PhpSql\Exception\InsertException;
+use BronOS\PhpSql\Exception\UpdateException;
 
 /**
- * Read interface.
+ * Write raw interface.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-interface ReadInterface extends ReadRawInterface
+interface WriteRawInterface
 {
     /**
-     * Executes sql statement with bind values.
-     * Returns an array containing all of the result set rows.
+     * Executes insert query and returns last inserted id.
      *
-     * @param SelectInterface $select
+     * @param string $query
+     * @param array  $binds
      *
-     * @return array
+     * @return string
      *
-     * @throws PhpSqlException
+     * @throws InsertException
      */
-    public function fetchAll(SelectInterface $select): array;
+    public function executeInsertRaw(string $query, array $binds = []): string;
 
     /**
-     * Executes sql statement with bind values.
-     * Fetches one row from a result set.
+     * Executes update query and returns number of updated rows.
      *
-     * @param SelectInterface $select
+     * @param string $query
+     * @param array  $binds
      *
-     * @return array
+     * @return int
      *
-     * @throws NotFoundException
-     * @throws PhpSqlException
+     * @throws UpdateException
      */
-    public function fetchOne(SelectInterface $select): array;
+    public function executeUpdateRaw(string $query, array $binds = []): int;
+
+    /**
+     * Executes delete query and returns number of affected rows.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return int
+     *
+     * @throws DeleteException
+     */
+    public function executeDeleteRaw(string $query, array $binds = []): int;
 }

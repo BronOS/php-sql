@@ -39,7 +39,6 @@ use Aura\SqlQuery\Common\InsertInterface;
 use Aura\SqlQuery\Common\UpdateInterface;
 use BronOS\PhpSql\Exception\DeleteException;
 use BronOS\PhpSql\Exception\InsertException;
-use BronOS\PhpSql\Exception\PhpSqlException;
 use BronOS\PhpSql\Exception\UpdateException;
 
 /**
@@ -54,64 +53,7 @@ trait WriteTrait
 {
     use ExecuteTrait;
     use QueryBuilderTrait;
-
-    /**
-     * Executes insert query and returns last inserted id.
-     *
-     * @param string $query
-     * @param array  $binds
-     *
-     * @return string
-     *
-     * @throws InsertException
-     */
-    public function executeInsertRaw(string $query, array $binds = []): string
-    {
-        try {
-            $this->execute($query, $binds);
-            return $this->getPdo()->lastInsertId();
-        } catch (PhpSqlException $e) {
-            throw new InsertException('Database insert error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Executes update query and returns number of updated rows.
-     *
-     * @param string $query
-     * @param array  $binds
-     *
-     * @return int
-     *
-     * @throws UpdateException
-     */
-    public function executeUpdateRaw(string $query, array $binds = []): int
-    {
-        try {
-            return $this->execute($query, $binds)->rowCount();
-        } catch (PhpSqlException $e) {
-            throw new UpdateException('Database update error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Executes delete query and returns number of affected rows.
-     *
-     * @param string $query
-     * @param array  $binds
-     *
-     * @return int
-     *
-     * @throws DeleteException
-     */
-    public function executeDeleteRaw(string $query, array $binds = []): int
-    {
-        try {
-            return $this->execute($query, $binds)->rowCount();
-        } catch (PhpSqlException $e) {
-            throw new DeleteException('Database delete error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
-    }
+    use WriteRawTrait;
 
     /**
      * Executes insert query and returns last inserted id.

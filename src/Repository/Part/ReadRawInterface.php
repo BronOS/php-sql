@@ -34,42 +34,43 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Repository\Part;
 
 
-use Aura\SqlQuery\Common\SelectInterface;
 use BronOS\PhpSql\Exception\NotFoundException;
 use BronOS\PhpSql\Exception\PhpSqlException;
 
 /**
- * Read interface.
+ * Read raw interface.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-interface ReadInterface extends ReadRawInterface
+interface ReadRawInterface
 {
     /**
      * Executes sql statement with bind values.
      * Returns an array containing all of the result set rows.
      *
-     * @param SelectInterface $select
+     * @param string $query
+     * @param array  $binds
      *
      * @return array
      *
      * @throws PhpSqlException
      */
-    public function fetchAll(SelectInterface $select): array;
+    public function fetchAllRaw(string $query, array $binds = []): array;
 
     /**
      * Executes sql statement with bind values.
      * Fetches one row from a result set.
      *
-     * @param SelectInterface $select
+     * @param string $query
+     * @param array  $binds
      *
      * @return array
      *
      * @throws NotFoundException
      * @throws PhpSqlException
      */
-    public function fetchOne(SelectInterface $select): array;
+    public function fetchOneRaw(string $query, array $binds = []): array;
 }

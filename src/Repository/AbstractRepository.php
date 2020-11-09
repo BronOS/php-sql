@@ -36,12 +36,9 @@ namespace BronOS\PhpSql\Repository;
 
 use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Model\AbstractModel;
-use BronOS\PhpSql\Repository\Part\ExecuteTrait;
 use BronOS\PhpSql\Repository\Part\ModelTrait;
-use BronOS\PhpSql\Repository\Part\PdoTrait;
 use BronOS\PhpSql\Repository\Part\QueryBuilderTrait;
 use BronOS\PhpSql\Repository\Part\ReadTrait;
-use BronOS\PhpSql\Repository\Part\TransactionTrait;
 use BronOS\PhpSql\Repository\Part\WriteTrait;
 use PDO;
 
@@ -54,13 +51,10 @@ use PDO;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-abstract class AbstractRepository implements RepositoryInterface
+abstract class AbstractRepository extends AbstractRawRepository implements RepositoryInterface
 {
-    use PdoTrait;
     use ModelTrait;
-    use ExecuteTrait;
     use QueryBuilderTrait;
-    use TransactionTrait;
     use WriteTrait;
     use ReadTrait;
 
@@ -76,7 +70,8 @@ abstract class AbstractRepository implements RepositoryInterface
         QueryFactory $queryFactory,
         AbstractModel $model
     ) {
-        $this->pdo = $pdo;
+        parent::__construct($pdo);
+
         $this->model = $model;
         $this->queryFactory = $queryFactory;
     }

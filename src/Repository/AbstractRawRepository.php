@@ -31,45 +31,41 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Repository;
 
 
-use Aura\SqlQuery\Common\SelectInterface;
-use BronOS\PhpSql\Exception\NotFoundException;
-use BronOS\PhpSql\Exception\PhpSqlException;
+use BronOS\PhpSql\Repository\Part\ExecuteTrait;
+use BronOS\PhpSql\Repository\Part\PdoTrait;
+use BronOS\PhpSql\Repository\Part\ReadRawTrait;
+use BronOS\PhpSql\Repository\Part\TransactionTrait;
+use BronOS\PhpSql\Repository\Part\WriteRawTrait;
+use PDO;
 
 /**
- * Read interface.
+ * Abstract repository.
+ * Responsible for building and executing sql queries.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-interface ReadInterface extends ReadRawInterface
+abstract class AbstractRawRepository implements RawRepositoryInterface
 {
-    /**
-     * Executes sql statement with bind values.
-     * Returns an array containing all of the result set rows.
-     *
-     * @param SelectInterface $select
-     *
-     * @return array
-     *
-     * @throws PhpSqlException
-     */
-    public function fetchAll(SelectInterface $select): array;
+    use PdoTrait;
+    use ExecuteTrait;
+    use TransactionTrait;
+    use WriteRawTrait;
+    use ReadRawTrait;
 
     /**
-     * Executes sql statement with bind values.
-     * Fetches one row from a result set.
+     * AbstractRepository constructor.
      *
-     * @param SelectInterface $select
-     *
-     * @return array
-     *
-     * @throws NotFoundException
-     * @throws PhpSqlException
+     * @param PDO $pdo
      */
-    public function fetchOne(SelectInterface $select): array;
+    public function __construct(
+        PDO $pdo
+    ) {
+        $this->pdo = $pdo;
+    }
 }
