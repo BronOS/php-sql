@@ -56,6 +56,45 @@ trait ReadTrait
      * Executes sql statement with bind values.
      * Returns an array containing all of the result set rows.
      *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return array
+     *
+     * @throws PhpSqlException
+     */
+    public function fetchAllRaw(string $query, array $binds = []): array
+    {
+        return $this->execute($query, $binds)->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Executes sql statement with bind values.
+     * Fetches one row from a result set.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return array
+     *
+     * @throws NotFoundException
+     * @throws PhpSqlException
+     */
+    public function fetchOneRaw(string $query, array $binds = []): array
+    {
+        $res = $this->execute($query, $binds)->fetch(PDO::FETCH_ASSOC);
+
+        if ($res === false) {
+            throw new NotFoundException('Database record not found');
+        }
+
+        return $res;
+    }
+
+    /**
+     * Executes sql statement with bind values.
+     * Returns an array containing all of the result set rows.
+     *
      * @param SelectInterface $select
      *
      * @return array
@@ -64,10 +103,7 @@ trait ReadTrait
      */
     public function fetchAll(SelectInterface $select): array
     {
-        return $this->execute(
-            $select->getStatement(),
-            $select->getBindValues()
-        )->fetchAll(PDO::FETCH_ASSOC);
+        return $this->fetchAllRaw($select->getStatement(), $select->getBindValues());
     }
 
     /**
@@ -83,15 +119,6 @@ trait ReadTrait
      */
     public function fetchOne(SelectInterface $select): array
     {
-        $res = $this->execute(
-            $select->getStatement(),
-            $select->getBindValues()
-        )->fetch(PDO::FETCH_ASSOC);
-
-        if ($res === false) {
-            throw new NotFoundException('Database record not found');
-        }
-
-        return $res;
+        return $this->fetchOneRaw($select->getStatement(), $select->getBindValues());
     }
 }

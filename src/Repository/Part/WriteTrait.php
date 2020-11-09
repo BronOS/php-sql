@@ -58,6 +58,64 @@ trait WriteTrait
     /**
      * Executes insert query and returns last inserted id.
      *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return string
+     *
+     * @throws InsertException
+     */
+    public function executeInsertRaw(string $query, array $binds = []): string
+    {
+        try {
+            $this->execute($query, $binds);
+            return $this->getPdo()->lastInsertId();
+        } catch (PhpSqlException $e) {
+            throw new InsertException('Database insert error: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Executes update query and returns number of updated rows.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return int
+     *
+     * @throws UpdateException
+     */
+    public function executeUpdateRaw(string $query, array $binds = []): int
+    {
+        try {
+            return $this->execute($query, $binds)->rowCount();
+        } catch (PhpSqlException $e) {
+            throw new UpdateException('Database update error: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Executes delete query and returns number of affected rows.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return int
+     *
+     * @throws DeleteException
+     */
+    public function executeDeleteRaw(string $query, array $binds = []): int
+    {
+        try {
+            return $this->execute($query, $binds)->rowCount();
+        } catch (PhpSqlException $e) {
+            throw new DeleteException('Database delete error: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Executes insert query and returns last inserted id.
+     *
      * @param InsertInterface $insert
      *
      * @return string
@@ -66,12 +124,7 @@ trait WriteTrait
      */
     public function executeInsert(InsertInterface $insert): string
     {
-        try {
-            $this->execute($insert->getStatement(), $insert->getBindValues());
-            return $this->getPdo()->lastInsertId();
-        } catch (PhpSqlException $e) {
-            throw new InsertException('Database insert error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
+        return $this->executeInsertRaw($insert->getStatement(), $insert->getBindValues());
     }
 
     /**
@@ -85,11 +138,7 @@ trait WriteTrait
      */
     public function executeUpdate(UpdateInterface $update): int
     {
-        try {
-            return $this->execute($update->getStatement(), $update->getBindValues())->rowCount();
-        } catch (PhpSqlException $e) {
-            throw new UpdateException('Database update error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
+        return $this->executeUpdateRaw($update->getStatement(), $update->getBindValues());
     }
 
     /**
@@ -103,10 +152,6 @@ trait WriteTrait
      */
     public function executeDelete(DeleteInterface $delete): int
     {
-        try {
-            return $this->execute($delete->getStatement(), $delete->getBindValues())->rowCount();
-        } catch (PhpSqlException $e) {
-            throw new DeleteException('Database delete error: ' . $e->getMessage(), $e->getCode(), $e);
-        }
+        return $this->executeDeleteRaw($delete->getStatement(), $delete->getBindValues());
     }
 }

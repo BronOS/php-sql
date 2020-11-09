@@ -54,6 +54,42 @@ interface WriteInterface
     /**
      * Executes insert query and returns last inserted id.
      *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return string
+     *
+     * @throws InsertException
+     */
+    public function executeInsertRaw(string $query, array $binds = []): string;
+
+    /**
+     * Executes update query and returns number of updated rows.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return int
+     *
+     * @throws UpdateException
+     */
+    public function executeUpdateRaw(string $query, array $binds = []): int;
+
+    /**
+     * Executes delete query and returns number of affected rows.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return int
+     *
+     * @throws DeleteException
+     */
+    public function executeDeleteRaw(string $query, array $binds = []): int;
+
+    /**
+     * Executes insert query and returns last inserted id.
+     *
      * @param InsertInterface $insert
      *
      * @return string

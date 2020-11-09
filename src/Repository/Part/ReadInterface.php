@@ -52,6 +52,33 @@ interface ReadInterface
      * Executes sql statement with bind values.
      * Returns an array containing all of the result set rows.
      *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return array
+     *
+     * @throws PhpSqlException
+     */
+    public function fetchAllRaw(string $query, array $binds = []): array;
+
+    /**
+     * Executes sql statement with bind values.
+     * Fetches one row from a result set.
+     *
+     * @param string $query
+     * @param array  $binds
+     *
+     * @return array
+     *
+     * @throws NotFoundException
+     * @throws PhpSqlException
+     */
+    public function fetchOneRaw(string $query, array $binds = []): array;
+
+    /**
+     * Executes sql statement with bind values.
+     * Returns an array containing all of the result set rows.
+     *
      * @param SelectInterface $select
      *
      * @return array
