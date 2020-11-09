@@ -161,7 +161,7 @@ abstract class AbstractModel
         if (!isset(self::$columnNames[static::class])) {
             self::$columnNames[static::class] = array_map(function (ColumnInterface $column) {
                 return $column->getName();
-            }, $this->getColumns());
+            }, array_values($this->getColumns()));
         }
 
         return self::$columnNames[static::class];

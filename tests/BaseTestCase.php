@@ -62,6 +62,7 @@ class BaseTestCase extends TestCase
             CREATE TABLE `blog` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(100) NOT NULL DEFAULT '',
+              `second_title` varchar(100) NOT NULL DEFAULT '',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
             

@@ -12,6 +12,7 @@ class BlogModel extends AbstractModel
 {
     protected IntField $id;
     protected VarCharField $title;
+    protected VarCharField $secondTitle;
 
     /**
      * UserModel constructor.
@@ -24,6 +25,7 @@ class BlogModel extends AbstractModel
     {
         $this->id = new IntField($this, $row, 'id', 11, true, true);
         $this->title = new VarCharField($this, $row, 'title', 100, false, '');
+        $this->secondTitle = new VarCharField($this, $row, 'second_title', 100, false, '');
     }
 
     /**
@@ -40,5 +42,13 @@ class BlogModel extends AbstractModel
     public function getTitle(): VarCharField
     {
         return $this->title;
+    }
+
+    /**
+     * @return VarCharField
+     */
+    public function getSecondTitle(): VarCharField
+    {
+        return $this->secondTitle;
     }
 }
