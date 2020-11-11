@@ -19,7 +19,7 @@ class RepositoryTest extends BaseTestCase
         $repo = $this->getRepo();
 
         $id = (int)$repo->executeInsert(
-            $repo->newInsert()->cols(['title' => 'UT'])
+            $repo->getQueryFactory()->newInsert()->cols(['title' => 'UT'])->into('blog')
         );
 
         $model = $repo->findById($id);
@@ -36,7 +36,7 @@ class RepositoryTest extends BaseTestCase
         $repo = $this->getRepo();
 
         $id = (int)$repo->executeInsert(
-            $repo->newInsert()->cols(['title' => 'UT'])
+            $repo->getQueryFactory()->newInsert()->cols(['title' => 'UT'])->into('blog')
         );
 
         $res = $repo->delete($id);

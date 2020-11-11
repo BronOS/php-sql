@@ -34,8 +34,8 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\BoolValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\BoolValueTrait;
+use BronOS\PhpSql\Field\Helper\BoolFieldInterface;
+use BronOS\PhpSql\Field\Helper\BoolFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Bool\BoolColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -58,9 +58,9 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class BoolField extends AbstractField implements BoolValueFieldInterface
+class BoolField extends AbstractField implements BoolFieldInterface
 {
-    use BoolValueTrait;
+    use BoolFieldTrait;
 
     /**
      * AbstractSQLColumn constructor.

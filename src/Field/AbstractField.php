@@ -34,12 +34,12 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use Aura\SqlQuery\AbstractQuery;
-use Aura\SqlQuery\Common\ValuesInterface;
+use BronOS\PhpSql\Field\Helper\ColumnTrait;
+use BronOS\PhpSql\Field\Helper\CriteriaTrait;
 use BronOS\PhpSql\Field\Helper\DirtyTrait;
 use BronOS\PhpSql\Field\Helper\ModelTrait;
 use BronOS\PhpSql\Model\AbstractModel;
-use BronOS\PhpSqlSchema\Column\ColumnInterface;
+use BronOS\PhpSql\QueryBuilder\Criteria;
 
 /**
  * A column decorator.
@@ -54,9 +54,11 @@ abstract class AbstractField
 {
     use ModelTrait;
     use DirtyTrait;
+    use ColumnTrait;
+    use CriteriaTrait;
 
     protected static array $columns = [];
-    private string $columnName;
+    protected string $columnName;
 
     /**
      * AbstractField constructor.
@@ -71,47 +73,61 @@ abstract class AbstractField
     }
 
     /**
-     * Returns column object.
+     * Returns key ~> value array of query column.
      *
-     * @return ColumnInterface
+     * @return array
      */
-    public function getColumn(): ColumnInterface
+    abstract public function toQuery(): array;
+
+    /**
+     * Returns "Like" SQL WHERE statement including value for binds.
+     * If value was not pass, use own internal value.
+     *    Example: field LIKE ?
+     *
+     * @param string|null $value
+     * @param bool        $and
+     *
+     * @return Criteria
+     */
+    abstract public function like(?string $value = null, bool $and = true): Criteria;
+
+    /**
+     * Returns "Not Like" SQL WHERE statement including value for binds.
+     * If value was not pass, use own internal value.
+     *    Example: field NOT LIKE ?
+     *
+     * @param string|null $value
+     * @param bool        $and
+     *
+     * @return Criteria
+     */
+    abstract public function notLike(?string $value = null, bool $and = true): Criteria;
+
+    /**
+     * Returns "IS NULL" SQL WHERE statement including value for binds.
+     * If value was not pass, use own internal value.
+     *    Example: field IS NULL
+     *
+     * @param bool $and
+     *
+     * @return Criteria
+     */
+    public function isNull(bool $and = true): Criteria
     {
-        return self::$columns[$this->getModelClassName()];
+        return $this->toCriteria('IS NULL', null, $and);
     }
 
     /**
-     * Returns whether column already exists in the registry.
+     * Returns "IS NOT NULL" SQL WHERE statement including value for binds.
+     * If value was not pass, use own internal value.
+     *    Example: field IS NOT NULL
      *
-     * @return bool
-     */
-    protected function isColumnExists(): bool
-    {
-        return isset(self::$columns[$this->getModelClassName()]);
-    }
-
-    /**
-     * Sets column.
+     * @param bool $and
      *
-     * @param ColumnInterface $column
+     * @return Criteria
      */
-    protected function setColumn(ColumnInterface $column): void
+    public function isNotNull(bool $and = true): Criteria
     {
-        self::$columns[$this->getModelClassName()] = $column;
+        return $this->toCriteria('IS NOT NULL', null, $and);
     }
-
-    /**
-     * @return string
-     */
-    private function getModelClassName(): string
-    {
-        return get_class($this->getModel()) . '::' . $this->columnName;
-    }
-
-    /**
-     * Binds field with query column.
-     *
-     * @param ValuesInterface $query
-     */
-    abstract public function bindCol(ValuesInterface $query): void;
 }

@@ -192,6 +192,23 @@ abstract class AbstractModel
     }
 
     /**
+     * Returns a key ~> value map of dirty fields
+     * where key is a column name and value is an arguments to be bound to placeholders
+     *
+     * @return array
+     */
+    public function dirtyFieldToQuery(): array
+    {
+       $map = [];
+
+        foreach ($this->getDirtyFields() as $dirtyField) {
+            $map = array_merge($map, $dirtyField->toQuery());
+       }
+
+       return $map;
+    }
+
+    /**
      * Returns database table indexes declaration.
      *
      * @return IndexInterface[]

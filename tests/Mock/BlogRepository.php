@@ -36,10 +36,7 @@ class BlogRepository extends AbstractCacheRepository
     {
         return $this->getModel()->newFromRow(
             $this->fetchOneCache(
-                $this->newSelectWhereInt(
-                    $this->getModel()->getId(),
-                    $id
-                ),
+                $this->newSelect($this->getModel()->getId()->eq($id)),
                 $force
             )
         );
@@ -55,7 +52,7 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function create(BlogModel $model): int
     {
-        $id = (int)$this->executeInsert($this->newInsertByModel($model));
+        $id = (int)$this->executeInsert($this->newInsert($model));
 
         $model->getId()->setValue($id);
         $model->undirty();
@@ -73,7 +70,7 @@ class BlogRepository extends AbstractCacheRepository
      */
     public function update(BlogModel $model): bool
     {
-        $this->executeUpdate($this->newUpdateWhereInt($model, $model->getId()));
+        $this->executeUpdate($this->newUpdate($model, $model->getId()->eq()));
         $model->undirty();
         return true;
     }
@@ -89,9 +86,8 @@ class BlogRepository extends AbstractCacheRepository
     public function delete(int $id): bool
     {
         $this->executeDelete(
-            $this->newDeleteWhereInt(
-                $this->getModel()->getId(),
-                $id
+            $this->newDelete(
+                $this->getModel()->getId()->eq($id)
             )
         );
         return true;

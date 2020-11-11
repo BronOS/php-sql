@@ -63,4 +63,12 @@ trait ModelTrait
     {
         $this->model = $model;
     }
+
+    /**
+     * @return string
+     */
+    protected function getModelClassName(): string
+    {
+        return get_class($this->getModel()) . '::' . $this->columnName;
+    }
 }

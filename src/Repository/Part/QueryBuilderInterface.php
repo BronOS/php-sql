@@ -41,14 +41,8 @@ use Aura\SqlQuery\Common\SelectInterface;
 use Aura\SqlQuery\Common\UpdateInterface;
 use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Exception\PhpSqlException;
-use BronOS\PhpSql\Field\Helper\ArrayValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\BoolValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\DateTimeValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\FloatValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\IntValueFieldInterface;
-use BronOS\PhpSql\Field\Helper\StringValueFieldInterface;
 use BronOS\PhpSql\Model\AbstractModel;
-use DateTime;
+use BronOS\PhpSql\QueryBuilder\Criteria;
 
 /**
  * Query builder interface.
@@ -66,131 +60,19 @@ interface QueryBuilderInterface
     public function getQueryFactory(): QueryFactory;
 
     /**
-     * Returns new select query object filled with table name.
+     * Returns new select query object filled with table name,
+     * columns and where clause by passed criterias.
      *
-     * @param bool $withColumns
+     * @param Criteria ...$criterias
      *
      * @return SelectInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newSelect(bool $withColumns = true): SelectInterface;
+    public function newSelect(Criteria ...$criterias): SelectInterface;
 
     /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param IntValueFieldInterface $field
-     * @param int                    $value
-     * @param bool                   $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereInt(
-        IntValueFieldInterface $field,
-        int $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param FloatValueFieldInterface $field
-     * @param float                    $value
-     * @param bool                     $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereFloat(
-        FloatValueFieldInterface $field,
-        float $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param BoolValueFieldInterface $field
-     * @param bool                    $value
-     * @param bool                    $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereBool(
-        BoolValueFieldInterface $field,
-        bool $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param StringValueFieldInterface $field
-     * @param string                    $value
-     * @param bool                      $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereString(
-        StringValueFieldInterface $field,
-        string $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param ArrayValueFieldInterface $field
-     * @param array                    $value
-     * @param bool                     $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereArray(
-        ArrayValueFieldInterface $field,
-        array $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new select query object filled with table name and where statement.
-     *
-     * @param DateTimeValueFieldInterface $field
-     * @param DateTime                    $value
-     * @param bool                        $withColumns
-     *
-     * @return AbstractQuery|SelectInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newSelectWhereDateTime(
-        DateTimeValueFieldInterface $field,
-        DateTime $value,
-        bool $withColumns = true
-    ): SelectInterface;
-
-    /**
-     * Returns new insert query object with table name.
-     *
-     * @return InsertInterface|AbstractQuery
-     *
-     * @throws PhpSqlException
-     *
-     * @throws PhpSqlException
-     */
-    public function newInsert(): InsertInterface;
-
-    /**
-     * Returns new insert query object with table name and all dirty fields.
+     * Returns new insert query object filled with table name and all dirty fields.
      *
      * @param AbstractModel $model
      *
@@ -198,167 +80,29 @@ interface QueryBuilderInterface
      *
      * @throws PhpSqlException
      */
-    public function newInsertByModel(AbstractModel $model): InsertInterface;
+    public function newInsert(AbstractModel $model): InsertInterface;
 
     /**
-     * Returns new update query object with table name.
+     * Returns new update query object filled with with table name,
+     * all dirty fields and where clause by passed criterias.
+     *
+     * @param AbstractModel $model
+     * @param Criteria      ...$criterias
      *
      * @return UpdateInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newUpdate(): UpdateInterface;
+    public function newUpdate(AbstractModel $model, Criteria ...$criterias): UpdateInterface;
 
     /**
-     * Returns new update query object with table name, all dirty fields and where statement.
+     * Returns new delete query object filled with table name and where clause by passed criterias.
      *
-     * @param AbstractModel          $model
-     * @param IntValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface|AbstractQuery
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereInt(AbstractModel $model, IntValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new update query object with table name, all dirty fields and where statement.
-     *
-     * @param AbstractModel            $model
-     * @param FloatValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereFloat(AbstractModel $model, FloatValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new update query object with table name, all dirty fields and where statement.
-     *
-     * @param AbstractModel           $model
-     * @param BoolValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereBool(AbstractModel $model, BoolValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new update query object with table name, all dirty fields and where statement.
-     *
-     * @param AbstractModel             $model
-     * @param StringValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereString(AbstractModel $model, StringValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new update query object with table name, all dirty fields and where statement.
-     *
-     * @param AbstractModel            $model
-     * @param ArrayValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereArray(AbstractModel $model, ArrayValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new update query object with table name, all dirty fields and where statement.
-     *
-     * @param AbstractModel               $model
-     * @param DateTimeValueFieldInterface $whereBy
-     *
-     * @return UpdateInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newUpdateWhereDateTime(AbstractModel $model, DateTimeValueFieldInterface $whereBy): UpdateInterface;
-
-    /**
-     * Returns new delete query object with table name.
+     * @param Criteria ...$criterias
      *
      * @return DeleteInterface|AbstractQuery
      *
      * @throws PhpSqlException
      */
-    public function newDelete(): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param IntValueFieldInterface $field
-     * @param int                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereInt(IntValueFieldInterface $field, int $value): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param FloatValueFieldInterface $field
-     * @param float                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereFloat(FloatValueFieldInterface $field, float $value): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param StringValueFieldInterface $field
-     * @param string                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereString(StringValueFieldInterface $field, string $value): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param BoolValueFieldInterface $field
-     * @param bool                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereBool(BoolValueFieldInterface $field, bool $value): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param ArrayValueFieldInterface $field
-     * @param array                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereArray(ArrayValueFieldInterface $field, array $value): DeleteInterface;
-
-    /**
-     * Returns new delete query object with table name and where statement.
-     *
-     * @param DateTimeValueFieldInterface $field
-     * @param DateTime                    $value
-     *
-     * @return AbstractQuery|DeleteInterface
-     *
-     * @throws PhpSqlException
-     */
-    public function newDeleteWhereDateTime(DateTimeValueFieldInterface $field, DateTime $value): DeleteInterface;
+    public function newDelete(Criteria ...$criterias): DeleteInterface;
 }

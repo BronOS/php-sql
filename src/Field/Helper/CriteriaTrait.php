@@ -34,74 +34,38 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field\Helper;
 
 
-use Aura\SqlQuery\AbstractQuery;
-use Aura\SqlQuery\Common\ValuesInterface;
+use BronOS\PhpSql\QueryBuilder\Criteria;
 
 /**
- * Int value trait.
+ * Criteria helper trait.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait IntValueTrait
+trait CriteriaTrait
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use BindTrait;
-
-    private ?int $value = null;
-
     /**
-     * Binds field with where statement.
-     * Uses internal value when passed value is null.
+     * @param string $operator
+     * @param mixed  $bind
      *
-     * @param AbstractQuery $query
-     * @param int|null      $value
-     * @param string        $operator
-     */
-    public function bindWhere(AbstractQuery $query, ?int $value = null, string $operator = '='): void
-    {
-        $this->where($query, $this->getColumn()->getName(), (string)($value ?? $this->getValue()), $operator);
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getValue(): ?int
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param int|null $value
-     */
-    public function setValue(?int $value): void
-    {
-        $this->isDirty = true;
-        $this->getModel()->isDirty = true;
-        $this->value = $value;
-    }
-
-    /**
-     * Binds field with query column.
+     * @param bool   $and
      *
-     * @param ValuesInterface $query
+     * @return Criteria
      */
-    public function bindCol(ValuesInterface $query): void
+    protected function toCriteria(string $operator, $bind, bool $and = true): Criteria
     {
-        $this->col($query, $this->getColumn()->getName(), (string)$this->getValue());
-    }
+        $cn = $this->getColumn()->getName();
+        $statement = sprintf('%s %s', $cn, $operator);
 
-    /**
-     * @param array  $row
-     * @param string $fieldName
-     */
-    protected function setValueFromRow(array $row, string $fieldName): void
-    {
-        if (isset($row[$fieldName]) && !is_null($row[$fieldName])) {
-            $this->value = (int)$row[$fieldName];
+        if (in_array(strtoupper($operator), ['IS NULL', 'IS NOT NULL'])) {
+            return new Criteria($statement, [], $and);
         }
+
+        $cnBind = ':' . $cn;
+        $statement .= sprintf(is_array($bind) ? '(%s)' : ' %s', $cnBind);
+
+        return new Criteria($statement, [$cn => $bind], $and);
     }
 }

@@ -31,41 +31,58 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Field\Helper;
+namespace BronOS\PhpSql\QueryBuilder;
 
-
-use Aura\SqlQuery\AbstractQuery;
-use Aura\SqlQuery\Common\ValuesInterface;
 
 /**
- * Bind where trait.
+ * A PHP representation of SQL WHERE statement.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait BindTrait
+class Criteria
 {
+    private string $cond;
+    private array $binds;
+    private bool $and;
+
     /**
-     * @param AbstractQuery $query
-     * @param string        $columnName
-     * @param string        $value
-     * @param string        $operator
+     * Criteria constructor.
+     *
+     * @param string $cond
+     * @param array  $binds
+     * @param bool   $and
      */
-    protected function where(AbstractQuery $query, string $columnName, string $value, string $operator = '='): void
+    public function __construct(string $cond, array $binds = [], bool $and = true)
     {
-        $query->where(sprintf('%s %s :%s', $columnName, $operator, $columnName));
-        $query->bindValue($columnName, $value);
+        $this->cond = $cond;
+        $this->binds = $binds;
+        $this->and = $and;
     }
 
     /**
-     * @param ValuesInterface $query
-     * @param string          $columnName
-     * @param string          $value
+     * @return string
      */
-    protected function col(ValuesInterface $query, string $columnName, string $value): void
+    public function getCond(): string
     {
-        $query->cols([$columnName => $value]);
+        return $this->cond;
+    }
+
+    /**
+     * @return array
+     */
+    public function getBinds(): array
+    {
+        return $this->binds;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAnd(): bool
+    {
+        return $this->and;
     }
 }

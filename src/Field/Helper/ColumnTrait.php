@@ -34,36 +34,45 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field\Helper;
 
 
-use Aura\SqlQuery\AbstractQuery;
-use Aura\SqlQuery\Common\ValuesInterface;
+use BronOS\PhpSqlSchema\Column\ColumnInterface;
 
 /**
- * Bool value field interface.
+ * Column helper trait.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-interface BoolValueFieldInterface
+trait ColumnTrait
 {
     /**
-     * Binds field with where statement.
-     * Uses internal value when passed value is null.
+     * Returns column object.
      *
-     * @param AbstractQuery $query
-     * @param bool|null     $value
-     * @param string        $operator
+     * @return ColumnInterface
      */
-    public function bindWhere(AbstractQuery $query, ?bool $value = null, string $operator = '='): void;
+    public function getColumn(): ColumnInterface
+    {
+        return self::$columns[$this->getModelClassName()];
+    }
 
     /**
-     * @return bool|null
+     * Returns whether column already exists in the registry.
+     *
+     * @return bool
      */
-    public function getValue(): ?bool;
+    protected function isColumnExists(): bool
+    {
+        return isset(self::$columns[$this->getModelClassName()]);
+    }
 
     /**
-     * @param bool|null $value
+     * Sets column.
+     *
+     * @param ColumnInterface $column
      */
-    public function setValue(?bool $value): void;
+    protected function setColumn(ColumnInterface $column): void
+    {
+        self::$columns[$this->getModelClassName()] = $column;
+    }
 }
