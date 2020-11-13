@@ -31,55 +31,30 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Field\Helper;
+namespace BronOS\PhpSql\Field;
 
 
 use BronOS\PhpSql\QueryBuilder\Criteria;
 
 /**
- * Int field trait.
+ * Int field interface.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait IntFieldTrait
+interface IntFieldInterface
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use ColumnTrait;
-    use CriteriaTrait;
-
-    private ?int $value = null;
-
-    /**
-     * Returns key ~> value array of query column.
-     *
-     * @return array
-     */
-    public function toQuery(): array
-    {
-        return [$this->getColumn()->getName() => $this->getValue()];
-    }
-
     /**
      * @return int|null
      */
-    public function getValue(): ?int
-    {
-        return $this->value;
-    }
+    public function getValue(): ?int;
 
     /**
      * @param int|null $value
      */
-    public function setValue(?int $value): void
-    {
-        $this->isDirty = true;
-        $this->getModel()->isDirty = true;
-        $this->value = $value;
-    }
+    public function setValue(?int $value): void;
 
     /**
      * Returns "Equal" SQL WHERE statement including value for binds.
@@ -91,10 +66,7 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function eq(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('=', $value ?: $this->getValue(), $and);
-    }
+    public function eq(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "NOT Equal" SQL WHERE statement including value for binds.
@@ -106,10 +78,7 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function ne(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('<>', $value ?: $this->getValue(), $and);
-    }
+    public function ne(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "Greater Than" SQL WHERE statement including value for binds.
@@ -121,10 +90,7 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function gt(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('>', $value ?: $this->getValue(), $and);
-    }
+    public function gt(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "Greater Than or Equal" SQL WHERE statement including value for binds.
@@ -136,10 +102,7 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function gte(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('>=', $value ?: $this->getValue(), $and);
-    }
+    public function gte(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "Less Than" SQL WHERE statement including value for binds.
@@ -151,10 +114,7 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function lt(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('<', $value ?: $this->getValue(), $and);
-    }
+    public function lt(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "Less Than or Equal" SQL WHERE statement including value for binds.
@@ -166,79 +126,29 @@ trait IntFieldTrait
      *
      * @return Criteria
      */
-    public function lte(?int $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('<=', $value ?: $this->getValue(), $and);
-    }
+    public function lte(?int $value = null, bool $and = true): Criteria;
 
     /**
      * Returns "In Array" SQL WHERE statement including value for binds.
      * If value was not pass, use own internal value.
      *    Example: field IN (?,?,?...)
      *
-     * @param string[] $values
-     * @param bool     $and
+     * @param float[] $values
+     * @param bool    $and
      *
      * @return Criteria
      */
-    public function in(array $values, bool $and = true): Criteria
-    {
-        return $this->toCriteria('IN', count($values) > 0 ? array_values($values) : [$this->getValue()], $and);
-    }
+    public function in(array $values, bool $and = true): Criteria;
 
     /**
      * Returns "NOT In Array" SQL WHERE statement including value for binds.
      * If value was not pass, use own internal value.
      *    Example: field NOT IN (?,?,?...)
      *
-     * @param string[] $values
-     * @param bool     $and
+     * @param float[] $values
+     * @param bool    $and
      *
      * @return Criteria
      */
-    public function nin(array $values, bool $and = true): Criteria
-    {
-        return $this->toCriteria('NOT IN', count($values) > 0 ? array_values($values) : [$this->getValue()], $and);
-    }
-
-    /**
-     * Returns "Like" SQL WHERE statement including value for binds.
-     * If value was not pass, use own internal value.
-     *    Example: field LIKE ?
-     *
-     * @param string|null $value
-     * @param bool        $and
-     *
-     * @return Criteria
-     */
-    public function like(?string $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('LIKE', $value ?: $this->getValue(), $and);
-    }
-
-    /**
-     * Returns "Not Like" SQL WHERE statement including value for binds.
-     * If value was not pass, use own internal value.
-     *    Example: field NOT LIKE ?
-     *
-     * @param string|null $value
-     * @param bool        $and
-     *
-     * @return Criteria
-     */
-    public function notLike(?string $value = null, bool $and = true): Criteria
-    {
-        return $this->toCriteria('LIKE', $value ?: $this->getValue(), $and);
-    }
-
-    /**
-     * @param array  $row
-     * @param string $fieldName
-     */
-    protected function setValueFromRow(array $row, string $fieldName): void
-    {
-        if (isset($row[$fieldName]) && !is_null($row[$fieldName])) {
-            $this->value = (int)$row[$fieldName];
-        }
-    }
+    public function nin(array $values, bool $and = true): Criteria;
 }

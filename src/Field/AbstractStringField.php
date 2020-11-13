@@ -45,7 +45,7 @@ use BronOS\PhpSql\QueryBuilder\Criteria;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-abstract class AbstractStringField extends AbstractField
+abstract class AbstractStringField extends AbstractField implements StringFieldInterface
 {
     private ?string $value = null;
 
