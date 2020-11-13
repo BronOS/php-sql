@@ -34,8 +34,6 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\StringFieldInterface;
-use BronOS\PhpSql\Field\Helper\StringFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\String\LongBlobColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -92,10 +90,8 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class LongBlobField extends AbstractField implements StringFieldInterface
+class LongBlobField extends AbstractStringField implements StringFieldInterface
 {
-    use StringFieldTrait;
-
     /**
      * IntColumn constructor.
      *

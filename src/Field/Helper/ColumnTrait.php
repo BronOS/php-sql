@@ -46,6 +46,9 @@ use BronOS\PhpSqlSchema\Column\ColumnInterface;
  */
 trait ColumnTrait
 {
+    protected static array $columns = [];
+    protected string $columnName;
+
     /**
      * Returns column object.
      *

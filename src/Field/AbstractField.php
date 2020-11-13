@@ -57,9 +57,6 @@ abstract class AbstractField
     use ColumnTrait;
     use CriteriaTrait;
 
-    protected static array $columns = [];
-    protected string $columnName;
-
     /**
      * AbstractField constructor.
      *
