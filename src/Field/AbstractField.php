@@ -34,12 +34,9 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\ColumnTrait;
-use BronOS\PhpSql\Field\Helper\CriteriaTrait;
-use BronOS\PhpSql\Field\Helper\DirtyTrait;
-use BronOS\PhpSql\Field\Helper\ModelTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\QueryBuilder\Criteria;
+use BronOS\PhpSqlSchema\Column\ColumnInterface;
 
 /**
  * A column decorator.
@@ -52,10 +49,10 @@ use BronOS\PhpSql\QueryBuilder\Criteria;
  */
 abstract class AbstractField
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use ColumnTrait;
-    use CriteriaTrait;
+    private AbstractModel $model;
+    public bool $isDirty = false;
+    protected static array $columns = [];
+    protected string $columnName;
 
     /**
      * AbstractField constructor.
@@ -67,6 +64,83 @@ abstract class AbstractField
     {
         $this->setModel($model);
         $this->columnName = $columnName;
+    }
+
+    /**
+     * @param string $operator
+     * @param mixed  $bind
+     *
+     * @param bool   $and
+     *
+     * @return Criteria
+     */
+    protected function toCriteria(string $operator, $bind, bool $and = true): Criteria
+    {
+        $cn = $this->getColumn()->getName();
+        $statement = sprintf('%s %s', $cn, $operator);
+
+        if (in_array(strtoupper($operator), ['IS NULL', 'IS NOT NULL'])) {
+            return new Criteria($statement, [], $and);
+        }
+
+        $cnBind = ':' . $cn;
+        $statement .= sprintf(is_array($bind) ? '(%s)' : ' %s', $cnBind);
+
+        return new Criteria($statement, [$cn => $bind], $and);
+    }
+
+    /**
+     * Returns column object.
+     *
+     * @return ColumnInterface
+     */
+    public function getColumn(): ColumnInterface
+    {
+        return self::$columns[$this->getModelClassName()];
+    }
+
+    /**
+     * Returns whether column already exists in the registry.
+     *
+     * @return bool
+     */
+    protected function isColumnExists(): bool
+    {
+        return isset(self::$columns[$this->getModelClassName()]);
+    }
+
+    /**
+     * Sets column.
+     *
+     * @param ColumnInterface $column
+     */
+    protected function setColumn(ColumnInterface $column): void
+    {
+        self::$columns[$this->getModelClassName()] = $column;
+    }
+
+    /**
+     * @return AbstractModel
+     */
+    public function getModel(): AbstractModel
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param AbstractModel $model
+     */
+    public function setModel(AbstractModel $model): void
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getModelClassName(): string
+    {
+        return get_class($this->getModel()) . '::' . $this->columnName;
     }
 
     /**
