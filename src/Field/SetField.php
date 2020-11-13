@@ -34,8 +34,6 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\ArrayFieldInterface;
-use BronOS\PhpSql\Field\Helper\ArrayFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\String\SetColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -51,10 +49,8 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class SetField extends AbstractField implements ArrayFieldInterface
+class SetField extends AbstractArrayField implements ArrayFieldInterface
 {
-    use ArrayFieldTrait;
-
     /**
      * IntColumn constructor.
      *
