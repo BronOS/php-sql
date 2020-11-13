@@ -35,8 +35,6 @@ namespace BronOS\PhpSql\Field;
 
 
 use BronOS\PhpSql\Exception\PhpSqlException;
-use BronOS\PhpSql\Field\Helper\DateTimeFieldInterface;
-use BronOS\PhpSql\Field\Helper\DateTimeFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\DateTime\TimestampColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -55,10 +53,8 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class TimestampField extends AbstractField implements DateTimeFieldInterface
+class TimestampField extends AbstractDateTimeField implements DateTimeFieldInterface
 {
-    use DateTimeFieldTrait;
-
     /**
      * AbstractSQLColumn constructor.
      *

@@ -31,7 +31,7 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Field\Helper;
+namespace BronOS\PhpSql\Field;
 
 
 use BronOS\PhpSql\Exception\PhpSqlException;
@@ -40,20 +40,16 @@ use DateTime;
 use Exception;
 
 /**
- * Date time value trait.
+ * A column decorator.
+ * Responsible for handling a field value and column declaration linked with model.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait DateTimeFieldTrait
+abstract class AbstractDateTimeField extends AbstractField implements DateTimeFieldInterface
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use ColumnTrait;
-    use CriteriaTrait;
-
     private ?DateTime $value = null;
 
     /**
