@@ -31,7 +31,7 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Field\Helper;
+namespace BronOS\PhpSql\Field;
 
 
 use BronOS\PhpSql\QueryBuilder\Criteria;

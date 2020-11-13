@@ -34,8 +34,6 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\FloatFieldInterface;
-use BronOS\PhpSql\Field\Helper\FloatFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Numeric\DoubleColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -70,10 +68,8 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class DoubleField extends AbstractField implements FloatFieldInterface
+class DoubleField extends AbstractFloatField implements FloatFieldInterface
 {
-    use FloatFieldTrait;
-
     /**
      * @param AbstractModel $model
      * @param array         $row

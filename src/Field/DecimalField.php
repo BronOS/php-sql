@@ -34,8 +34,6 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Field;
 
 
-use BronOS\PhpSql\Field\Helper\FloatFieldInterface;
-use BronOS\PhpSql\Field\Helper\FloatFieldTrait;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSqlSchema\Column\Numeric\DecimalColumn;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
@@ -71,10 +69,8 @@ use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-class DecimalField extends AbstractField implements FloatFieldInterface
+class DecimalField extends AbstractFloatField implements FloatFieldInterface
 {
-    use FloatFieldTrait;
-
     /**
      * AbstractDecimalColumn constructor.
      *

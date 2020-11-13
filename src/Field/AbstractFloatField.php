@@ -31,26 +31,22 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Field\Helper;
+namespace BronOS\PhpSql\Field;
 
 
 use BronOS\PhpSql\QueryBuilder\Criteria;
 
 /**
- * Float field trait.
+ * A column decorator.
+ * Responsible for handling a field value and column declaration linked with model.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait FloatFieldTrait
+abstract class AbstractFloatField extends AbstractField implements FloatFieldInterface
 {
-    use ModelTrait;
-    use DirtyTrait;
-    use ColumnTrait;
-    use CriteriaTrait;
-
     private ?float $value = null;
 
     /**
