@@ -31,52 +31,39 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Orm\Composition;
 
 
-use BronOS\PhpSql\Exception\PhpSqlException;
-use PDOException;
-use PDOStatement;
+use BronOS\PhpSql\Exception\UnresolvedException;
 
 /**
- * Execute trait
+ * Provides "number of affected rows result" functionality for ORM result sets.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait ExecuteTrait
+trait AffectedRowsResultTrait
 {
-    use PdoTrait;
+    use ResolveTrait;
+
+    protected ?int $rowCount = null;
 
     /**
-     * Execute query.
+     * Returns the number of affected rows.
+     * Raises UnresolvedException if result set is unresolved.
      *
-     * @param string $query
-     * @param array $binds
+     * @return int
      *
-     * @return PDOStatement
-     *
-     * @throws PhpSqlException
+     * @throws UnresolvedException
      */
-    public function execute(string $query, array $binds = []): PDOStatement
+    public function affectedRows(): int
     {
-        try {
-            $sth = $this->getPdo()->prepare($query);
-            if ($sth === false) {
-                throw new PDOException("Cannot prepare sql statement");
-            }
-
-            $sth->execute($binds);
-        } catch (PDOException $e) {
-            throw new PhpSqlException(sprintf(
-                'DB query execution error: %s: %s',
-                $e->getCode(),
-                $e->getMessage()
-            ), (int)$e->getCode(), $e);
+        if (!$this->isResolved()) {
+            throw new UnresolvedException('Try to get number of affected rows on unresolved result set.');
         }
 
-        return $sth;
+        return $this->rowCount;
     }
 }

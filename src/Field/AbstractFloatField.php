@@ -168,7 +168,7 @@ abstract class AbstractFloatField extends AbstractField implements FloatFieldInt
     }
 
     /**
-     * Returns "In Array" SQL WHERE statement including value for binds.
+     * Returns "In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field IN (?,?,?...)
      *
@@ -179,11 +179,15 @@ abstract class AbstractFloatField extends AbstractField implements FloatFieldInt
      */
     public function in(array $values, bool $and = true): Criteria
     {
-        return $this->toCriteria('IN', count($values) > 0 ? array_values($values) : [$this->getValue()], $and);
+        return $this->toCriteria(
+            'IN',
+            count($values) > 0 ? array_values($values) : [$this->getValue()],
+            $and
+        );
     }
 
     /**
-     * Returns "NOT In Array" SQL WHERE statement including value for binds.
+     * Returns "NOT In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field NOT IN (?,?,?...)
      *
@@ -194,7 +198,11 @@ abstract class AbstractFloatField extends AbstractField implements FloatFieldInt
      */
     public function nin(array $values, bool $and = true): Criteria
     {
-        return $this->toCriteria('NOT IN', count($values) > 0 ? array_values($values) : [$this->getValue()], $and);
+        return $this->toCriteria(
+            'NOT IN',
+            count($values) > 0 ? array_values($values) : [$this->getValue()],
+            $and
+        );
     }
 
     /**

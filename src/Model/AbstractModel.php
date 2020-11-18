@@ -34,14 +34,18 @@ declare(strict_types=1);
 namespace BronOS\PhpSql\Model;
 
 
+use BronOS\PhpSql\Exception\FieldNotExistsException;
 use BronOS\PhpSql\Exception\PhpSqlException;
 use BronOS\PhpSql\Field\AbstractField;
+use BronOS\PhpSqlSchema\Column\Attribute\AutoincrementColumnAttributeInterface;
 use BronOS\PhpSqlSchema\Column\ColumnInterface;
 use BronOS\PhpSqlSchema\Exception\DuplicateColumnException;
 use BronOS\PhpSqlSchema\Exception\DuplicateIndexException;
 use BronOS\PhpSqlSchema\Exception\DuplicateRelationException;
+use BronOS\PhpSqlSchema\Exception\PhpSqlSchemaException;
 use BronOS\PhpSqlSchema\Exception\SQLTableSchemaDeclarationException;
 use BronOS\PhpSqlSchema\Index\IndexInterface;
+use BronOS\PhpSqlSchema\Index\PrimaryKeyInterface;
 use BronOS\PhpSqlSchema\Relation\ForeignKeyInterface;
 use BronOS\PhpSqlSchema\SQLTableSchema;
 use ReflectionClass;
@@ -65,6 +69,7 @@ abstract class AbstractModel
     protected ?string $collation = null;
 
     public bool $isDirty = false;
+    public bool $isNew = true;
 
     private static array $columns = [];
     private static array $columnNames = [];
@@ -180,6 +185,58 @@ abstract class AbstractModel
     }
 
     /**
+     * Returns field by column name.
+     *
+     * @param string $columnName
+     *
+     * @return AbstractField
+     *
+     * @throws FieldNotExistsException
+     */
+    public function getField(string $columnName): AbstractField
+    {
+        foreach ($this->getFields() as $field) {
+            if ($field->getColumn()->getName() == $columnName) {
+                return $field;
+            }
+        }
+
+        throw new FieldNotExistsException(sprintf('Field %s does not exists in mode %s', $columnName, static::class));
+    }
+
+    /**
+     * Tries to find and returns primary key field.
+     * Throws FieldNotExists exception if primary key field not found.
+     *
+     * @return AbstractField
+     *
+     * @throws FieldNotExistsException
+     */
+    public function getPk(): AbstractField
+    {
+        // try to find autoincrement field first
+        foreach ($this->getFields() as $field) {
+            $col = $field->getColumn();
+            if ($col instanceof AutoincrementColumnAttributeInterface && $col->isAutoincrement()) {
+                return $field;
+            }
+        }
+
+        try {
+            // try to find by primary key index
+            foreach ($this->getSchema()->getIndexes() as $index) {
+                if ($index instanceof PrimaryKeyInterface && count($index->getFields()) == 1) {
+                    return $this->getField($index->getFields()[0]);
+                }
+            }
+        } catch (PhpSqlSchemaException | PhpSqlException $e) {
+            throw new FieldNotExistsException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        throw new FieldNotExistsException(sprintf("Can not find primary key on model %s", static::class));
+    }
+
+    /**
      * Returns list of fields marked as dirty if any.
      *
      * @return AbstractField[]
@@ -237,7 +294,9 @@ abstract class AbstractModel
      */
     public function newFromRow(array $row): self
     {
-        return new $this($row);
+        $model = new $this($row);
+        $model->isNew = false;
+        return $model;
     }
 
     /**

@@ -83,10 +83,18 @@ abstract class AbstractField
             return new Criteria($statement, [], $and);
         }
 
-        $cnBind = ':' . $cn;
-        $statement .= sprintf(is_array($bind) ? '(%s)' : ' %s', $cnBind);
+        if (!is_array($bind)) {
+            $statement .= sprintf(' :%s', $cn);
+            return new Criteria($statement, [$cn => $bind], $and);
+        }
 
-        return new Criteria($statement, [$cn => $bind], $and);
+        $binds = [];
+        foreach (array_values($bind) as $i => $value) {
+            $binds[':' . $cn . ($i + 1)] = $value;
+        }
+
+        $statement .= sprintf(' (%s)', implode(',', array_keys($binds)));
+        return new Criteria($statement, $binds, $and);
     }
 
     /**

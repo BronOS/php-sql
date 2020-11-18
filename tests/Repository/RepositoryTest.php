@@ -3,7 +3,6 @@
 namespace BronOS\PhpSql\Tests\Repository;
 
 
-
 use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Exception\InsertException;
 use BronOS\PhpSql\Exception\NotFoundException;
@@ -11,6 +10,7 @@ use BronOS\PhpSql\Repository\Cache\ApcuCacheStorage;
 use BronOS\PhpSql\Tests\BaseTestCase;
 use BronOS\PhpSql\Tests\Mock\BlogModel;
 use BronOS\PhpSql\Tests\Mock\BlogRepository;
+
 
 class RepositoryTest extends BaseTestCase
 {

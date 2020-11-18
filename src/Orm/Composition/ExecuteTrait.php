@@ -31,15 +31,16 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Orm\Composition;
 
 
+use Aura\SqlQuery\AbstractQuery;
 use BronOS\PhpSql\Exception\PhpSqlException;
 use PDOException;
 use PDOStatement;
 
 /**
- * Execute trait
+ * Provides "execute" functionality for ORM result sets.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
@@ -51,7 +52,7 @@ trait ExecuteTrait
     use PdoTrait;
 
     /**
-     * Execute query.
+     * Executes raw SQL query and returns pdo statement object.
      *
      * @param string $query
      * @param array $binds
@@ -60,7 +61,7 @@ trait ExecuteTrait
      *
      * @throws PhpSqlException
      */
-    public function execute(string $query, array $binds = []): PDOStatement
+    public function executeRawQuery(string $query, array $binds = []): PDOStatement
     {
         try {
             $sth = $this->getPdo()->prepare($query);
@@ -78,5 +79,18 @@ trait ExecuteTrait
         }
 
         return $sth;
+    }
+
+    /**
+     * Executes query object and returns pdo statement object.
+     *
+     * @param AbstractQuery $query
+     *
+     * @return PDOStatement
+     * @throws PhpSqlException
+     */
+    public function executeQuery(AbstractQuery $query): PDOStatement
+    {
+        return $this->executeRawQuery($query->getStatement(), $query->getBindValues());
     }
 }

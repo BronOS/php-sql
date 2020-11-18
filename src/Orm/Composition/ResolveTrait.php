@@ -31,52 +31,28 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Orm\Composition;
 
-
-use BronOS\PhpSql\Exception\PhpSqlException;
-use PDOException;
-use PDOStatement;
 
 /**
- * Execute trait
+ * Provides "resolve" functionality for ORM result sets.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait ExecuteTrait
+trait ResolveTrait
 {
-    use PdoTrait;
+    protected bool $isResolved = false;
 
     /**
-     * Execute query.
+     * Checks whether the result set is already resolved/executed.
      *
-     * @param string $query
-     * @param array $binds
-     *
-     * @return PDOStatement
-     *
-     * @throws PhpSqlException
+     * @return bool
      */
-    public function execute(string $query, array $binds = []): PDOStatement
+    public function isResolved(): bool
     {
-        try {
-            $sth = $this->getPdo()->prepare($query);
-            if ($sth === false) {
-                throw new PDOException("Cannot prepare sql statement");
-            }
-
-            $sth->execute($binds);
-        } catch (PDOException $e) {
-            throw new PhpSqlException(sprintf(
-                'DB query execution error: %s: %s',
-                $e->getCode(),
-                $e->getMessage()
-            ), (int)$e->getCode(), $e);
-        }
-
-        return $sth;
+        return $this->isResolved;
     }
 }

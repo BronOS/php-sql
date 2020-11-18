@@ -169,7 +169,7 @@ abstract class AbstractBoolField extends AbstractField implements BoolFieldInter
     }
 
     /**
-     * Returns "In Array" SQL WHERE statement including value for binds.
+     * Returns "In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field IN (?,?,?...)
      *
@@ -186,7 +186,7 @@ abstract class AbstractBoolField extends AbstractField implements BoolFieldInter
     }
 
     /**
-     * Returns "NOT In Array" SQL WHERE statement including value for binds.
+     * Returns "NOT In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field NOT IN (?,?,?...)
      *

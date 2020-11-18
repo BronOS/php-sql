@@ -194,7 +194,7 @@ abstract class AbstractDateTimeField extends AbstractField implements DateTimeFi
     }
 
     /**
-     * Returns "In Array" SQL WHERE statement including value for binds.
+     * Returns "In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field IN (?,?,?...)
      *
@@ -215,7 +215,7 @@ abstract class AbstractDateTimeField extends AbstractField implements DateTimeFi
     }
 
     /**
-     * Returns "NOT In Array" SQL WHERE statement including value for binds.
+     * Returns "NOT In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field NOT IN (?,?,?...)
      *

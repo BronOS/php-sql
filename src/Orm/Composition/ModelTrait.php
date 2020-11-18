@@ -31,52 +31,38 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Orm\Composition;
 
 
-use BronOS\PhpSql\Exception\PhpSqlException;
-use PDOException;
-use PDOStatement;
+use BronOS\PhpSql\Orm\AbstractOrmModel;
 
 /**
- * Execute trait
+ * Provides "model" functionality for ORM result sets.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait ExecuteTrait
+trait ModelTrait
 {
-    use PdoTrait;
+    private AbstractOrmModel $model;
 
     /**
-     * Execute query.
+     * ModelTrait constructor.
      *
-     * @param string $query
-     * @param array $binds
-     *
-     * @return PDOStatement
-     *
-     * @throws PhpSqlException
+     * @param AbstractOrmModel $model
      */
-    public function execute(string $query, array $binds = []): PDOStatement
+    public function __construct(AbstractOrmModel $model)
     {
-        try {
-            $sth = $this->getPdo()->prepare($query);
-            if ($sth === false) {
-                throw new PDOException("Cannot prepare sql statement");
-            }
+        $this->model = $model;
+    }
 
-            $sth->execute($binds);
-        } catch (PDOException $e) {
-            throw new PhpSqlException(sprintf(
-                'DB query execution error: %s: %s',
-                $e->getCode(),
-                $e->getMessage()
-            ), (int)$e->getCode(), $e);
-        }
-
-        return $sth;
+    /**
+     * @return AbstractOrmModel
+     */
+    public function getModel(): AbstractOrmModel
+    {
+        return $this->model;
     }
 }

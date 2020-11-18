@@ -31,52 +31,17 @@
 
 declare(strict_types=1);
 
-namespace BronOS\PhpSql\Repository\Part;
+namespace BronOS\PhpSql\Exception;
 
-
-use BronOS\PhpSql\Exception\PhpSqlException;
-use PDOException;
-use PDOStatement;
 
 /**
- * Execute trait
+ * Models field does not exists exception.
  *
  * @package   bronos\php-sql
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
  * @copyright 2020
  * @license   https://opensource.org/licenses/MIT
  */
-trait ExecuteTrait
+class FieldNotExistsException extends PhpSqlException
 {
-    use PdoTrait;
-
-    /**
-     * Execute query.
-     *
-     * @param string $query
-     * @param array $binds
-     *
-     * @return PDOStatement
-     *
-     * @throws PhpSqlException
-     */
-    public function execute(string $query, array $binds = []): PDOStatement
-    {
-        try {
-            $sth = $this->getPdo()->prepare($query);
-            if ($sth === false) {
-                throw new PDOException("Cannot prepare sql statement");
-            }
-
-            $sth->execute($binds);
-        } catch (PDOException $e) {
-            throw new PhpSqlException(sprintf(
-                'DB query execution error: %s: %s',
-                $e->getCode(),
-                $e->getMessage()
-            ), (int)$e->getCode(), $e);
-        }
-
-        return $sth;
-    }
 }

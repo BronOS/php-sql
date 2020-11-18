@@ -176,7 +176,7 @@ abstract class AbstractArrayField extends AbstractField implements ArrayFieldInt
     }
 
     /**
-     * Returns "In Array" SQL WHERE statement including value for binds.
+     * Returns "In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field IN (?,?,?...)
      *
@@ -187,11 +187,15 @@ abstract class AbstractArrayField extends AbstractField implements ArrayFieldInt
      */
     public function in(array $values, bool $and = true): Criteria
     {
-        return $this->toCriteria('IN', count($values) > 0 ? array_values($values) : ($this->getValue() ?: []), $and);
+        return $this->toCriteria(
+            'IN',
+            count($values) > 0 ? array_values($values) : ($this->getValue() ?: []),
+            $and
+        );
     }
 
     /**
-     * Returns "NOT In Array" SQL WHERE statement including value for binds.
+     * Returns "NOT In Array" SQL WHERE statement including values for binds.
      * If value was not pass, use own internal value.
      *    Example: field NOT IN (?,?,?...)
      *
@@ -202,8 +206,11 @@ abstract class AbstractArrayField extends AbstractField implements ArrayFieldInt
      */
     public function nin(array $values, bool $and = true): Criteria
     {
-        return $this->toCriteria('NOT IN', count($values) > 0 ? array_values($values) : ($this->getValue() ?: []),
-            $and);
+        return $this->toCriteria(
+            'NOT IN',
+            count($values) > 0 ? array_values($values) : ($this->getValue() ?: []),
+            $and
+        );
     }
 
     /**
@@ -218,7 +225,11 @@ abstract class AbstractArrayField extends AbstractField implements ArrayFieldInt
      */
     public function like(?string $value = null, bool $and = true): Criteria
     {
-        return $this->toCriteria('LIKE', $value ?: implode(',', $this->getValue() ?: []), $and);
+        return $this->toCriteria(
+            'LIKE',
+            $value ?: implode(',', $this->getValue() ?: []),
+            $and
+        );
     }
 
     /**
@@ -233,7 +244,11 @@ abstract class AbstractArrayField extends AbstractField implements ArrayFieldInt
      */
     public function notLike(?string $value = null, bool $and = true): Criteria
     {
-        return $this->toCriteria('LIKE', $value ?: implode(',', $this->getValue() ?: []), $and);
+        return $this->toCriteria(
+            'LIKE',
+            $value ?: implode(',', $this->getValue() ?: []),
+            $and
+        );
     }
 
     /**
