@@ -5,7 +5,6 @@ namespace BronOS\PhpSql\Tests\Mock;
 
 use BronOS\PhpSql\Field\IntField;
 use BronOS\PhpSql\Field\VarCharField;
-use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\Orm\AbstractOrmModel;
 use BronOS\PhpSqlSchema\Exception\ColumnDeclarationException;
 

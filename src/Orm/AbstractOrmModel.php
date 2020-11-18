@@ -39,15 +39,10 @@ use BronOS\PhpSql\Exception\DeleteException;
 use BronOS\PhpSql\Exception\FieldNotExistsException;
 use BronOS\PhpSql\Exception\InsertException;
 use BronOS\PhpSql\Exception\PhpSqlException;
-use BronOS\PhpSql\Exception\ResolvedException;
 use BronOS\PhpSql\Exception\UpdateException;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\QueryBuilder\Criteria;
-use BronOS\PhpSqlSchema\Exception\DuplicateColumnException;
-use BronOS\PhpSqlSchema\Exception\DuplicateIndexException;
-use BronOS\PhpSqlSchema\Exception\DuplicateRelationException;
 use BronOS\PhpSqlSchema\Exception\PhpSqlSchemaException;
-use BronOS\PhpSqlSchema\Exception\SQLTableSchemaDeclarationException;
 
 /**
  * A representation of database record and table schema declaration.

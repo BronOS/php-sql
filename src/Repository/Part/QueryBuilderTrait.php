@@ -44,7 +44,6 @@ use Aura\SqlQuery\QueryFactory;
 use BronOS\PhpSql\Exception\PhpSqlException;
 use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\QueryBuilder\Criteria;
-use DateTime;
 
 /**
  * Query builder trait

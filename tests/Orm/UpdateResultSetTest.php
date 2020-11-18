@@ -3,7 +3,6 @@
 namespace BronOS\PhpSql\Tests\Orm;
 
 
-use BronOS\PhpSql\Exception\NotFoundException;
 use BronOS\PhpSql\Exception\ResolvedException;
 use BronOS\PhpSql\Exception\UnresolvedException;
 use BronOS\PhpSql\Orm\AbstractOrmModel;

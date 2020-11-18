@@ -9,7 +9,6 @@ use BronOS\PhpSql\Exception\InsertException;
 use BronOS\PhpSql\Exception\NotFoundException;
 use BronOS\PhpSql\Exception\PhpSqlException;
 use BronOS\PhpSql\Exception\UpdateException;
-use BronOS\PhpSql\Model\AbstractModel;
 use BronOS\PhpSql\Repository\AbstractCacheRepository;
 
 class BlogRepository extends AbstractCacheRepository

@@ -15,9 +15,7 @@ use BronOS\PhpSql\Orm\ResultSetFactoryInterface;
 use BronOS\PhpSql\Orm\SelectResultSet;
 use BronOS\PhpSql\Orm\UpdateResultSet;
 use BronOS\PhpSql\Tests\BaseTestCase;
-use BronOS\PhpSql\Tests\Mock\BlogModel;
 use BronOS\PhpSql\Tests\Mock\BlogOrmModel;
-use PHPUnit\Framework\TestCase;
 
 class ResultSetFactoryTest extends BaseTestCase
 {
