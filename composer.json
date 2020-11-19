@@ -15,7 +15,7 @@
     "bronos/php-enum": "*",
     "bronos/php-sql-schema": "1.*",
     "bronos/php-sql-migrations": "1.*",
-    "aura/sqlquery": "3.x-dev",
+    "bronos/php-sql-query-builder": "3.*",
     "bronos/php-sql-discovery": "1.*",
     "symfony/console": "*"
   },
