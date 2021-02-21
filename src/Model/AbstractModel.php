@@ -286,6 +286,16 @@ abstract class AbstractModel
     }
 
     /**
+     * Returns new empty instance of model.
+     *
+     * @return $this
+     */
+    public function new(): self
+    {
+        return $this->newFromRow([]);
+    }
+
+    /**
      * Instantiates single model from database single row (record).
      *
      * @param array $row

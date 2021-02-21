@@ -65,4 +65,13 @@ class ModelTest extends TestCase
         $this->assertArrayHasKey('title', $dirtyFields);
         $this->assertEquals('test', $dirtyFields['title']->getValue());
     }
+
+    public function testNew()
+    {
+        $model = new BlogModel();
+
+        $nm = $model->new();
+        $this->assertInstanceOf(BlogModel::class, $nm);
+        $this->assertFalse($model->getTitle()->isDirty);
+    }
 }
